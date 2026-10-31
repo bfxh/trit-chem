@@ -5,7 +5,7 @@ Every generated Rust table has a generator; nothing was typed by hand into
 
 | Data | Source | Fetched by | Licence status |
 | --- | --- | --- | --- |
-| 118 elements (mass, EN, IE1, radius, shells, phase, melt/boil, density, category) | `PeriodicTableJSON.json` (Bowserinator) cross-checked against IUPAC values | `scripts/gen_elements.py` | **NOASSERTION** — facts only, file must be replaced before publishing |
+| 118 elements (mass, EN, IE1, radius, shells, phase, melt/boil, density, category) | mendeleev 1.3.0 SQLite database (MIT, Lukasz Mentel) | `scripts/fetch_elements.py` (pinned wheel, SHA-256 checked) -> `data/external/elements.json` | **MIT** — compatible with this repo; MIT notice kept in `data/external/MENDELEEV-LICENSE` |
 | Common oxidation states | CRC Handbook 97th ed., table "Oxidation states of the elements" | curated dict in `gen_elements.py` | facts |
 | Shomate coefficients (20 species, up to 3 ranges each) | NIST WebBook / NIST-JANAF (Chase 1998) | `scripts/fetch_shomate.py` | US Government compilation; attribution required |
 | 25 C `dHf`, `dGf`, `S` for 50 species | NIST-JANAF and NBS/CODATA, transcribed in `data/external/thermo_table.txt` | curated list in `gen_thermo.py` | facts with source column per row |
@@ -15,17 +15,20 @@ Each `Species` row carries a `source` field pointing at `NIST-JANAF 4th ed.
 (Chase 1998)` or `NBS/CODATA 25 C table`. Keep it that way; an unsourced row is
 a bug.
 
-## Licensing gate before publishing
+## Licensing
 
-The element JSON repository declares **no licence** (`NOASSERTION` on GitHub).
-The numbers inside are facts and not copyrightable in most jurisdictions, but
-shipping the source file would be a redistribution question. Before this repo
-becomes public:
+**Element data: cleared.** The first source (Bowserinator/Periodic-Table-JSON)
+was CC BY-SA 3.0; ShareAlike would have propagated into the generated table and
+into downstream game code. It has been replaced with mendeleev 1.3.0, which is
+MIT (Copyright (c) 2015 Lukasz Mentel). The wheel is downloaded by
+`fetch_elements.py`, its SHA-256 is verified, and only derived facts are
+committed as `data/external/elements.json`. The MIT notice is kept verbatim in
+`data/external/MENDELEEV-LICENSE`. No ShareAlike, no per-file copyleft.
 
-1. Regenerate the element table from a permissively licensed source, or
-2. keep only the derived `elements_data.rs` (facts) and drop
-   `data/external/PeriodicTableJSON.json`, and
-3. keep NIST attribution in `docs/PAPERS.md` and in the generated file headers.
+Oxidation states are a small curated overlay (common states, CRC Handbook)
+because mendeleev's "main" set is sparse for some metals. `gen_elements.py`
+asserts that mendeleev's main set is a subset of the overlay; a typo in either
+fails generation. These are facts, not a copied compilation.
 
 The NIST WebBook pages state: "Data compilation copyright by the U.S. Secretary
 of Commerce on behalf of the U.S.A." NIST data is distributed for public use
@@ -36,7 +39,8 @@ with attribution; do not strip the source strings.
 From the repository root:
 
 ```text
-python scripts/gen_elements.py     # needs data/external/PeriodicTableJSON.json
+python scripts/fetch_elements.py   # network; pinned mendeleev wheel -> elements.json
+python scripts/gen_elements.py     # elements.json -> elements_data.rs
 python scripts/fetch_shomate.py    # network; writes data/external/shomate.json
 python scripts/gen_thermo.py       # writes species_data.rs
 cargo test --workspace             # data consistency gates run here

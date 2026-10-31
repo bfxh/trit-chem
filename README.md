@@ -63,10 +63,10 @@ cargo run -p trit-chem-cli -- check     # data self-consistency
   solve is the M2 target; see `docs/PAPERS.md`.
 - **RK4 is not stiffness-safe.** Combustion mechanisms will need an implicit
   integrator.
-- **Element data licensing.** `data/external/PeriodicTableJSON.json` has no
-  declared licence (`NOASSERTION`). Values are facts, but the file must be
-  replaced with a permissively licensed source before this repository is
-  published. See `docs/DATA.md`.
+- **Element data** comes from mendeleev 1.3.0 (MIT). The build script
+  downloads a pinned wheel, verifies its SHA-256 and commits only derived
+  facts. The CC BY-SA source used in the first draft has been removed; see
+  `docs/DATA.md`.
 
 ## Layout
 
@@ -82,7 +82,8 @@ scripts/                  data generators (run from the repo root)
 ## Regenerating data
 
 ```text
-python scripts/gen_elements.py     # PeriodicTableJSON.json -> elements_data.rs
+python scripts/fetch_elements.py   # pinned mendeleev wheel -> elements.json
+python scripts/gen_elements.py     # elements.json -> elements_data.rs
 python scripts/fetch_shomate.py    # NIST WebBook -> shomate.json
 python scripts/gen_thermo.py       # curated table + shomate.json -> species_data.rs
 cargo test --workspace

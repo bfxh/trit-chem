@@ -24,4 +24,6 @@ python scripts/module_budget.py
    reverted.
 5. **Hand-written files stay under 800 lines** (`scripts/module_budget.py`).
    Generated `elements_data.rs` / `species_data.rs` are exempt.
-6. **Do not publish before the data licence gate in `docs/DATA.md` is cleared.**
+6. **Data licences must stay compatible with MIT.** Element facts come from
+   mendeleev (MIT); NIST data requires attribution. Do not vendor a CC BY-SA
+   table. See `docs/DATA.md`.

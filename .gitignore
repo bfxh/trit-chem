@@ -1,3 +1,6 @@
 /target
 **/target
 *.pdb
+data/external/.cache/
+__pycache__/
+*.canvas.data.json

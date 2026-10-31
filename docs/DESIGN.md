@@ -155,7 +155,7 @@ M1 (correctness within the current model):
 3. Phase-change species and transition reactions (ice/water/steam, molten salts).
 4. Data expansion: the ~200 species a survival/crafting game actually touches
    (fuels, ores, alloys, acids, gases), with a per-species source field.
-5. Replace `PeriodicTableJSON.json` with a permissively licensed source.
+5. ~~Replace the CC BY-SA element source~~ (done in M0.1: mendeleev 1.3.0, MIT).
 
 M2 (model upgrades):
 

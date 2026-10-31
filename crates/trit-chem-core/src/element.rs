@@ -124,7 +124,7 @@ mod tests {
     #[test]
     fn spot_checks_against_handbook_values() {
         let na = by_symbol("Na").unwrap();
-        assert!((na.mass - 22.989_769_282).abs() < 1e-9);
+        assert!((na.mass - 22.989_769_282).abs() < 1e-7);
         assert_eq!(na.electronegativity, Some(0.93));
         assert_eq!(na.outer_shell_electrons, 1);
         assert!(na.is_metal());

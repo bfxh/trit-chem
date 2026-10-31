@@ -1,5 +1,34 @@
 # Changelog
 
+## 0.1.1 (2026-10-31) — element source and licence
+
+### Changed
+
+- Element table rebuilt from **mendeleev 1.3.0** (MIT, (c) Lukasz Mentel) instead
+  of Bowserinator/Periodic-Table-JSON (**CC BY-SA 3.0**). ShareAlike would have
+  propagated into this MIT repository and into downstream game code.
+- `scripts/fetch_elements.py` downloads a pinned wheel, verifies its SHA-256
+  (`76f41576...218d1c`) and reads the SQLite database without installing the
+  package. Only derived facts are committed (`data/external/elements.json`);
+  the MIT notice is kept in `data/external/MENDELEEV-LICENSE`.
+- Ionization energies are now taken directly in eV (no kJ/mol conversion).
+- `phase_298` is derived from melting/boiling points; subliming elements with no
+  melting point (carbon) are classified solid.
+- Oxidation states remain a curated CRC overlay because mendeleev's main set is
+  sparse for some metals (Cu: [2] only). Generation asserts that mendeleev's
+  main set is a subset of the overlay; Se/Te gained +2 from that check.
+
+### Added
+
+- `tests/data_license.rs`: the MIT notice, the pinned hash and the absence of
+  the CC BY-SA file are now test-enforced.
+
+### Data deltas worth knowing
+
+- Null coverage after the swap: electronegativity 33, first IE 10, radius 28,
+  melting point 17, boiling point 30 (mostly superheavy elements).
+- Densities for gases are g/cm3 (e.g. H = 8.2e-5), same unit as before.
+
 ## 0.1.0 (2026-10-31) — M0
 
 First slice of the chemistry foundation for AE-ENGINE F0.
