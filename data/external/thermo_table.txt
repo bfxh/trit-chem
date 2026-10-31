@@ -1,0 +1,1819 @@
+Tables: 
+ 
+ 
+Table 1.  Thermodynamic data at 25oC for assorted inorganic substances. 
+ 
+Substance 
+Enthalpy of formation 
+∆Hf
+0 , kJ/mol 
+Free energy of formation 
+∆Gf
+0 , kJ/mol 
+Entropy 
+S0, J/(K·mol) 
+Aluminum 
+ 
+ 
+ 
+Al(s) 
+0 
+0 
+28.33 
+Al3+(aq) 
+-524.7 
+-481.2 
+-321.7 
+Al2O3(s) 
+-1675.7 
+-1582.3 
+50.92 
+Al(OH)3(s) 
+-1276 
+--- 
+--- 
+AlCl3(s) 
+-704.2 
+-628.8 
+110.67 
+Antimony 
+ 
+ 
+ 
+SbH3(g) 
+145.11 
+147.75 
+232.78 
+SbCl3(g) 
+-313.8 
+-301.2 
+337.80 
+SbCl5(g) 
+-394.34 
+-334.29 
+401.94 
+Arsenic 
+ 
+ 
+ 
+As(s, gray) 
+0 
+0 
+35.1 
+As2S3(s) 
+-169.0 
+-168.6 
+163.6 
+AsO4
+3-(aq) 
+-888.14 
+-648.41 
+-162.8 
+Barium 
+ 
+ 
+ 
+Ba(s) 
+0 
+0 
+62.8 
+Ba2+(aq) 
+-537.64 
+-560.77 
+9.6 
+BaO(s) 
+-553.5 
+-525.1 
+70.42 
+BaCO3(s) 
+-1216.3 
+-1137.6 
+112.1 
+BaCO3(aq) 
+-1214.78 
+-1088.59 
+-47.3 
+Boron 
+ 
+ 
+ 
+B(s) 
+0 
+0 
+5.86 
+B2O3(s) 
+-1272.8 
+-1193.7 
+53.97 
+BF3(g) 
+-1137.0 
+-1120.3 
+254.12 
+Bromine 
+ 
+ 
+ 
+Br2(l) 
+0 
+0 
+152.23 
+Br2(g) 
+30.91 
+3.11 
+245.46 
+Br(g) 
+111.88 
+82.40 
+175.02 
+Br–(aq) 
+-121.55 
+-103.96 
+82.4 
+HBr(g) 
+-36.40 
+-53.45 
+198.70 
+Calcium 
+ 
+ 
+ 
+Ca(s) 
+0 
+0 
+41.42 
+Ca(g) 
+178.2 
+144.3 
+154.88 
+Ca2+(aq) 
+-542.83 
+-553.58 
+-53.1 
+CaO(s) 
+-635.09 
+-604.03 
+39.79 
+Ca(OH)2(s) 
+-986.09 
+-898.49 
+83.39 
+Ca(OH)2(aq) 
+-1002.82 
+-868.07 
+-74.5 
+
+Table 1.  Thermodynamic data at 25oC for assorted inorganic substances (continued). 
+ 
+Substance 
+Enthalpy of formation 
+∆Hf
+0 , kJ/mol 
+Free energy of formation 
+∆Gf
+0 , kJ/mol 
+Entropy 
+S0, J/(K·mol) 
+CaCO3(s, calcite) 
+-1206.9 
+-1128.8 
+92.9 
+CaCO3(s,aragonite) 
+-1207.1 
+-1127.8 
+88.7 
+CaCO3(aq) 
+-1219.97 
+-1081.39 
+-110.0 
+CaF2(s) 
+-1219.6 
+-1167.3 
+68.87 
+CaF2(aq) 
+-1208.09 
+-1111.15 
+-80.8 
+CaCl2(s) 
+-795.8 
+-748.1 
+104.6 
+CaCl2(aq) 
+-877.1 
+-816.0 
+59.8 
+CaBr2(s) 
+-682.8 
+-663.6 
+130 
+CaC2(s) 
+-59.8 
+-64.9 
+69.96 
+CaSO4(s) 
+-1434.11 
+-1321.79 
+106.7 
+CaSO4(aq) 
+-1452.10 
+-1298.10 
+-33.1 
+Carbon 
+ 
+ 
+ 
+C(s, graphite) 
+0 
+0 
+5.740 
+C(s, diamond) 
+1.895 
+2.900 
+2.377 
+C(g) 
+716.68 
+671.26 
+158.10 
+CO(g) 
+-110.53 
+-137.17 
+197.67 
+CO2(g) 
+-393.51 
+-394.36 
+213.74 
+CO3
+2-(aq) 
+-677.14 
+-527.81 
+-56.9 
+CCl4(l) 
+-135.44 
+-65.21 
+216.40 
+CS2(l) 
+89.70 
+65.27 
+153.34 
+HCN(g) 
+135.1 
+124.7 
+201.78 
+HCN(l) 
+108.87 
+124.97 
+112.84 
+Cerium 
+ 
+ 
+ 
+Ce(s) 
+0 
+0 
+72.0 
+Ce3+(aq) 
+-696.2 
+-672.0 
+-205 
+Ce4+(aq) 
+-537.2 
+-503.8 
+-301 
+Chlorine 
+ 
+ 
+ 
+Cl2(g) 
+0 
+0 
+223.07 
+Cl(g) 
+121.68 
+105.68 
+165.20 
+Cl–(aq) 
+-167.16 
+-131.23 
+56.5 
+HCl(g) 
+-92.31 
+-95.30 
+186.91 
+HCl(aq) 
+-167.16 
+-131.23 
+56.5 
+Copper 
+ 
+ 
+ 
+Cu(s) 
+0 
+0 
+33.15 
+Cu+(aq) 
+71.67 
+49.98 
+40.6 
+Cu2+(aq) 
+64.77 
+65.49 
+-99.6 
+Cu2O(s) 
+-168.6 
+-146.0 
+93.14 
+CuO(s) 
+-157.3 
+-129.7 
+42.63 
+CuSO4(s) 
+-771.36 
+-661.8 
+109 
+ 
+
+Table 1.  Thermodynamic data at 25oC for assorted inorganic substances (continued). 
+ 
+Substance 
+Enthalpy of formation 
+∆Hf
+0 , kJ/mol 
+Free energy of formation 
+∆Gf
+0 , kJ/mol 
+Entropy 
+S0, J/(K·mol) 
+Fluorine 
+ 
+ 
+ 
+F2(g) 
+0 
+0 
+202.78 
+F–(aq) 
+-332.63 
+-278.79 
+-13.8 
+HF(g) 
+-271.1 
+-273.2 
+173.78 
+HF(aq) 
+-332.36 
+-278.79 
+-13.8 
+Hydrogen 
+ 
+ 
+ 
+H2(g) 
+0 
+0 
+130.68 
+H(g) 
+217.97 
+203.25 
+114.71 
+H+(aq) 
+0 
+0 
+0 
+H2O(l) 
+-285.83 
+-237.13 
+69.91 
+H2O(g) 
+-241.82 
+-228.57 
+188.83 
+H2O2(l) 
+-187.78 
+-120.35 
+109.6 
+H2O2(aq) 
+-191.17 
+-134.03 
+143.9 
+D2(g) 
+0 
+0 
+144.96 
+D2O(l) 
+-294.60 
+-243.44 
+75.94 
+D2O(g) 
+-249.20 
+-234.54 
+198.34 
+Iodine 
+ 
+ 
+ 
+I2(s) 
+0 
+0 
+116.14 
+I2(g) 
+62.44 
+19.33 
+260.69 
+I–(aq) 
+-55.19 
+-51.57 
+111.3 
+HI(g) 
+26.48 
+1.70 
+206.59 
+Iron 
+ 
+ 
+ 
+Fe(s) 
+0 
+0 
+27.28 
+Fe2+(aq) 
+-89.1 
+-78.90 
+-137.7 
+Fe3+(aq) 
+-48.5 
+-4.7 
+-315.9 
+Fe3O4(s, magnetite) 
+-1118.4 
+-1015.4 
+146.4 
+Fe2O3(s, hematite) 
+-824.2 
+-742.2 
+87.40 
+FeS(s,α) 
+-100.0 
+-100.4 
+60.29 
+FeS(aq) 
+--- 
+6.9 
+--- 
+FeS2(s) 
+-178.2 
+-166.9 
+52.93 
+Lead 
+ 
+ 
+ 
+Pb(s) 
+0 
+0 
+64.81 
+Pb2+(aq) 
+-1.7 
+-24.43 
+10.5 
+PbO2(s) 
+-277.4 
+-217.33 
+68.6 
+PbSO4(s) 
+-919.94 
+-813.14 
+148.57 
+PbBr2(s) 
+-278.7 
+-261.92 
+161.5 
+PbBr2(aq) 
+-244.8 
+-232.34 
+175.3 
+Magnesium 
+ 
+ 
+ 
+Mg(s) 
+0 
+0 
+32.68 
+ 
+
+Table 1.  Thermodynamic data at 25oC for assorted inorganic substances (continued). 
+ 
+Substance 
+Enthalpy of formation 
+∆Hf
+0 , kJ/mol 
+Free energy of formation 
+∆Gf
+0 , kJ/mol 
+Entropy 
+S0, J/(K·mol) 
+Mg(g) 
+147.70 
+113.10 
+148.65 
+Mg2+(aq) 
+-466.85 
+-454.8 
+-138.1 
+MgO(s) 
+-601.70 
+-569.43 
+26.94 
+MgCO3(s) 
+-1095.8 
+-1012.1 
+65.7 
+MgBr2(s) 
+-524.3 
+-503.8 
+117.2 
+Mercury 
+ 
+ 
+ 
+Hg(l) 
+0 
+0 
+76.02 
+Hg(g) 
+61.32 
+31.82 
+174.96 
+HgO(s) 
+-90.83 
+-58.54 
+70.29 
+Hg2Cl2(s) 
+-265.22 
+-210.75 
+192.5 
+Nitrogen 
+ 
+ 
+ 
+N2(g) 
+0 
+0 
+191.61 
+NO(g) 
+90.25 
+86.55 
+210.76 
+N2O(g) 
+82.05 
+104.20 
+219.85 
+NO2(g) 
+33.18 
+51.31 
+240.06 
+N2O4(g) 
+9.16 
+97.89 
+304.29 
+HNO3(l) 
+-174.10 
+-80.71 
+155.60 
+HNO3(aq) 
+-207.36 
+-111.22 
+146.4 
+NO3
+–(aq) 
+-205.0 
+-108.74 
+146.4 
+NH3(g) 
+-46.11 
+-16.45 
+192.45 
+NH3(aq) 
+-80.29 
+-26.50 
+111.3 
+NH4
++(aq) 
+-132.51 
+-79.31 
+113.4 
+NH2OH(s) 
+-114.2 
+--- 
+--- 
+HN3(g) 
+294.1 
+328.1 
+238.97 
+N2H4(l) 
+50.63 
+149.34 
+121.21 
+NH4NO3(s) 
+-365.56 
+-183.87 
+151.08 
+NH4Cl(s) 
+-314.43 
+-202.87 
+94.6 
+NH4ClO4(s) 
+-295.31 
+-88.75 
+186.2 
+Oxygen 
+ 
+ 
+ 
+O2(g) 
+0 
+0 
+205.14 
+O3(g) 
+142.7 
+163.2 
+238.93 
+OH–(aq) 
+-229.99 
+-157.24 
+-10.75 
+Phosphorus 
+ 
+ 
+ 
+P(s, white) 
+0 
+0 
+41.09 
+P4(g) 
+58.91 
+24.44 
+279.98 
+PH3(g) 
+5.4 
+13.4 
+210.23 
+P4O10(s) 
+-2984.0 
+-2697.0 
+228.86 
+H3PO3(aq) 
+-964.0 
+--- 
+--- 
+H3PO4(l) 
+-1266.9 
+--- 
+--- 
+ 
+
+Table 1.  Thermodynamic data at 25oC for assorted inorganic substances (continued). 
+ 
+Substance 
+Enthalpy of formation 
+∆Hf
+0 , kJ/mol 
+Free energy of formation 
+∆Gf
+0 , kJ/mol 
+Entropy 
+S0, J/(K·mol) 
+H3PO4(aq) 
+-277.4 
+-1018.7 
+--- 
+PCl3(l) 
+-319.7 
+-272.3 
+217.18 
+PCl3(g) 
+-287.0 
+-267.8 
+311.78 
+PCl5(g) 
+-374.9 
+-305.0 
+364.6 
+PCl5(s) 
+-443.5 
+--- 
+--- 
+Potassium 
+ 
+ 
+ 
+K(s) 
+0 
+0 
+64.18 
+K(g) 
+89.24 
+60.59 
+160.34 
+K+(aq) 
+-252.38 
+-283.27 
+102.5 
+KOH(s) 
+-424.76 
+-379.08 
+78.9 
+KOH(aq) 
+-482.37 
+-440.50 
+91.6 
+KF(s) 
+-567.27 
+-537.75 
+66.57 
+KCl(s) 
+-436.75 
+-409.14 
+82.59 
+KBr(s) 
+-393.80 
+-380.66 
+95.90 
+KI(s) 
+-327.90 
+-324.89 
+106.32 
+KClO3(s) 
+-397.73 
+-296.25 
+143.1 
+KClO4(s) 
+-432.75 
+-303.09 
+151.0 
+K2S(s) 
+-380.7 
+-364.0 
+105 
+K2S(aq) 
+-471.5 
+-480.7 
+190.4 
+Silicon 
+ 
+ 
+ 
+Si(s) 
+0 
+0 
+18.83 
+SiO2(s,α) 
+-910.94 
+-856.64 
+41.84 
+Silver 
+ 
+ 
+ 
+Ag(s) 
+0 
+0 
+42.55 
+Ag+(aq) 
+105.58 
+77.11 
+72.68 
+Ag2O(s) 
+-31.05 
+-11.20 
+121.3 
+AgBr(s) 
+-100.37 
+-96.90 
+107.1 
+AgBr(aq) 
+-15.98 
+-26.86 
+155.2 
+AgCl(s) 
+-127.7 
+-109.79 
+96.2 
+AgCl(aq) 
+-61.58 
+-54.12 
+129.3 
+AgI(s) 
+-61.84 
+-66.19 
+115.5 
+AgI(aq) 
+50.38 
+25.52 
+184.1 
+AgNO3(s) 
+-124.39 
+-33.41 
+140.92 
+Sodium 
+ 
+ 
+ 
+Na(s) 
+0 
+0 
+51.21 
+Na(g) 
+107.32 
+76.76 
+153.71 
+Na+(aq) 
+-240.12 
+-261.91 
+59.0 
+NaOH(s) 
+-425.61 
+-379.49 
+64.46 
+NaOH(aq) 
+-470.11 
+-419.15 
+48.1 
+ 
+
+Table 1.  Thermodynamic data at 25oC for assorted inorganic substances (continued). 
+ 
+Substance 
+Enthalpy of formation 
+∆Hf
+0 , kJ/mol 
+Free energy of formation 
+∆Gf
+0 , kJ/mol 
+Entropy 
+S0, J/(K·mol) 
+NaCl(s) 
+-411.15 
+-384.12 
+72.13 
+NaBr(s) 
+-361.06 
+-348.98 
+86.82 
+NaI(s) 
+-287.78 
+-286.06 
+98.53 
+Sulfur 
+ 
+ 
+ 
+S(s, rhombic) 
+0 
+0 
+31.80 
+S(s, monoclinic) 
+0.33 
+0.1 
+32.6 
+S2–(aq) 
+33.1 
+85.8 
+-14.6 
+SO2(g) 
+-296.83 
+-300.19 
+248.22 
+SO3(g) 
+-395.72 
+-371.06 
+256.76 
+H2SO4(l) 
+-813.99 
+-690.00 
+156.90 
+H2SO4(aq) 
+-909.27 
+-744.53 
+20.1 
+SO4
+2–(aq) 
+-909.27 
+-744.53 
+20.1 
+H2S(g) 
+-20.63 
+-33.56 
+205.79 
+H2S(aq) 
+-39.7 
+-27.83 
+121 
+SF6(g) 
+-1209 
+-1105.3 
+291.82 
+Tin 
+ 
+ 
+ 
+Sn(s, white) 
+0 
+0 
+51.55 
+Sn(s, gray) 
+-2.09 
+0.13 
+44.14 
+SnO(s) 
+-285.8 
+-256.9 
+56.5 
+SnO2(s) 
+-580.7 
+-519.6 
+52.3 
+Zinc 
+ 
+ 
+ 
+Zn(s) 
+0 
+0 
+41.63 
+Zn2+(aq) 
+-153.89 
+-147.06 
+-112.1 
+ZnO(s) 
+-348.28 
+-318.30 
+43.64 
+ 
+ 
+ 
+
+Table 2.  Thermodynamic data at 25oC for assorted organic substances. 
+ 
+Substance 
+Enthalpy of combustion 
+∆Hc
+0 , kJ/mol 
+Enthalpy of formation 
+∆Hf
+0 , kJ/mol 
+Free energy of formation 
+∆Gf
+0 , kJ/mol 
+Entropy 
+S0, J/(K·mol) 
+Hydrocarbons 
+ 
+ 
+ 
+ 
+CH4(g), methane 
+-890 
+-74.81 
+-50.72 
+186.26 
+C2H2(g), acethylene 
+-1300 
+226.73 
+209.20 
+200.94 
+C2H4(g), ethylene 
+-1411 
+52.26 
+68.15 
+219.56 
+C2H6(g), ethane 
+-1560 
+-84.68 
+-32.82 
+229.60 
+C3H6(g), propylene 
+-2058 
+20.42 
+62.78 
+266.6 
+C3H6(g), cyclopropane 
+-2091 
+53.30 
+104.45 
+237.4 
+C3H8(g), propane 
+-2220 
+-103.85 
+-23.49 
+270.2 
+C4H10(g), butane 
+-2878 
+-126.15 
+-17.03 
+310.1 
+C5H12(g), pentane 
+-3537 
+-146.44 
+-8.20 
+349 
+C6H6(l), benzene 
+-3268 
+49.0 
+124.3 
+173.3 
+C6H6(g) 
+-3302 
+--- 
+--- 
+--- 
+C7H8(l), toluene 
+-3910 
+12.0 
+113.8 
+221.0 
+C7H8(g) 
+-3953 
+--- 
+--- 
+--- 
+C6H12(l), cyclohexane 
+-3920 
+-156.4 
+26.7 
+204.4 
+C6H12(g) 
+-3953 
+--- 
+--- 
+--- 
+C8H18(l), octane 
+-5471 
+-249.9 
+6.4 
+358 
+Alcohols, phenols 
+ 
+ 
+ 
+ 
+CH3OH(l), methanol 
+-726 
+-238.86 
+-166.27 
+126.8 
+CH3OH(g) 
+-764 
+-200.66 
+-161.96 
+239.81 
+C2H5OH(l), ethanol 
+-1368 
+-277.69 
+-174.78 
+160.7 
+C2H5OH(g) 
+-1409 
+-235.10 
+-168.49 
+282.70 
+C6H5OH(s), phenol 
+-3054 
+-164.6 
+-50.42 
+144.0 
+ 
+ 
+
+Table 2.  Thermodynamic data at 25oC for assorted organic substances (continued). 
+ 
+Substance 
+Enthalpy of combustion 
+∆Hc
+0 , kJ/mol 
+Enthalpy of formation 
+∆Hf
+0 , kJ/mol 
+Free energy of formation 
+∆Gf
+0 , kJ/mol 
+Entropy 
+S0, J/(K·mol) 
+Aldehydes, ketones 
+ 
+ 
+ 
+ 
+HCHO (g), formaldehyde 
+-571 
+-108.57 
+-102.53 
+218.77 
+CH3CHO (l), acetaldehyde 
+-1166 
+-192.30 
+-128.12 
+160.2 
+CH3CHO (g) 
+-1192 
+-166.19 
+-128.86 
+250.3 
+CH3COCH3 (l), acetone 
+-1790 
+-248.1 
+-155.4 
+200 
+Carboxylic acids 
+ 
+ 
+ 
+ 
+HCOOH (l), formic acid 
+-255 
+-424.72 
+-361.35 
+128.95 
+CH3COOH (l), acetic acid 
+-875 
+-484.5 
+-389.9 
+159.8 
+CH3COOH (aq) 
+--- 
+-485.76 
+-396.46 
+86.6 
+(COOH)2 (s), oxalic acid 
+-254 
+-827.2 
+-697.9 
+120 
+C6H5COOH (s), benzoic acid 
+-3227 
+-385.1 
+-245.3 
+167.6 
+Sugars 
+ 
+ 
+ 
+ 
+C6H12O6 (s), glucose 
+-2808 
+-1268 
+-910 
+212 
+C6H12O6 (aq) 
+--- 
+--- 
+-917 
+--- 
+C6H12O6 (s), fructose 
+-2810 
+-1266 
+--- 
+--- 
+C12H22O11 (s), sucrose 
+-5645 
+-2222 
+-1545 
+360 
+Nitrogen compounds 
+ 
+ 
+ 
+ 
+CO(NH2)2 (s), urea 
+-632 
+-333.51 
+-197.33 
+104.60 
+C6H5NH2 (l), aniline 
+-3395 
+31.6 
+149.1 
+191.3 
+NH2CH2COOH(s), glycine 
+-969 
+-532.9 
+-373.4 
+103.51 
+CH3NH2 (g), methylamine 
+-1085 
+-22.97 
+32.16 
+243.41 
+ 
+ 
+
+Table 3.  Standard reduction potentials at 25oC (electrochemical series).
+ 
+ 
+Half reaction 
+E0, V 
+Strongest oxidizer 
+ 
+H4XeO6 + 2H+ + 2e– → XeO3 + 3H2O 
++3.0 
+F2 + 2e– → 2F– 
++2.87 
+O3 + 2H+ + 2e– → O2 + H2O 
++2.07 
+S2O8
+2– + 2e– → 2SO4
+2– 
++2.05 
+Ag2+ + e– → Ag+ 
++1.98 
+Co3+ + e– → Co2+ 
++1.81 
+H2O2 + 2H+ + 2e– → 2H2O 
++1.78 
+MnO4
+– + 4H+ + 3e– → MnO2 + 2H2O 
++1.70 
+Au+ + e– → Au0 
++1.69 
+Pb4+ + 2e– → Pb2+ 
++1.67 
+2HClO + 2H+ + 2e– → Cl2 + 2H2O 
++1.63 
+Hg2+ + 2e– → Hg0 
++1.62 
+Ce4+ + e– → Ce3+ 
++1.61 
+2HBrO + 2H+ + 2e– → Br2 + 2H2O 
++1.60 
+MnO4
+– + 8H+ + 5e– → Mn2+ + 4H2O 
++1.51 
+Mn3+ + 2e– → Mn2+ 
++1.51 
+Au3+ + 3e– → Au0 
++1.40 
+Cl2 + 2e– → 2Cl– 
++1.36 
+Cr2O7
+2– + 14H+ + 6e– → 2Cr3+ + 7H2O 
++1.33 
+O3 + H2O + 2e– → O2 + 2OH– 
++1.24 
+O2 + 4H+ + 4e– → 2H2O 
++1.23 
+MnO2 + 4H+ + 2e– → Mn2+ + 2H2O 
++1.23 
+ClO4
+– + 2H+ + 2e– → ClO3
+– + H2O 
++1.23 
+Pt2+ + 2e– → Pt0 
++1.20 
+2IO3
+– +12H+ + 10e– → I2 + 6H2O 
++1.20 
+Br2 + 2e– → 2Br– 
++1.09 
+Pu4+ + e– → Pu3+ 
++0.97 
+NO3
+– + 4H+ + 3e– → NO + 2H2O 
++0.96 
+2Hg2+ + 2e– → Hg2
+2+ 
++0.92 
+ClO– + H2O + 2e– → Cl– + 2OH–  
++0.89 
+H2O2 + 2e– → 2OH–  
++0.88 
+Cu2+ + I– + e– → CuI  
++0.86 
+NO3
+– + 2H+ + e– → NO2 + H2O 
++0.80 
+Ag+ + e– → Ag0 
++0.80 
+Hg2
+2+ + 2e– → 2Hg0 
++0.79 
+AgF + e– → Ag0 + F– 
++0.78 
+ 
+ 
+Half reaction 
+E0, V 
+Fe3+ + e– → Fe2+ 
++0.77 
+BrO– + H2O + 2e– → Br– + 2OH–  
++0.76 
+O2 + 2H+ + 2e– → H2O2 
++0.68 
+MnO4
+2– + 2H2O + 2e– → MnO2 + 4OH– 
++0.60 
+H3AsO4 + 2H+ + 2e– → HAsO2 + 2H2O 
++0.56 
+MnO4
+– + e– → MnO4
+2– 
++0.56 
+I2 + 2e– → 2I– 
++0.54 
+I3
+– + 2e– → 3I– 
++0.53 
+Cu+ + e– → Cu0 
++0.52 
+NiO(OH) + H2O + e– → Ni(OH)2 + OH– 
++0.49 
+O2 + 2H2O + 4e– → 4OH–  
++0.40 
+ClO4
+– + H2O + 2e– → ClO3
+– + 2OH– 
++0.36 
+Cu2+ + 2e– → Cu0 
++0.34 
+Hg2Cl2 + 2e– → 2Hg0 + 2Cl– 
++0.27 
+Hg2Cl2 + 2e– → 2Hg0 + 2Cl– 
++0.241 
+Saturated Calomel Electrode 
+ 
+AgCl + e– → Ag0 + Cl– 
++0.22 
+AgCl + e– → Ag0 + Cl– 
++0.197 
+Ag/AgCl electrode in saturated KCl 
+ 
+Bi3+ + 3e– → Bi0 
++0.20 
+SO4
+2– + 4H+ + 2e– → H2SO3 + H2O 
++0.17 
+Cu2+ + e– → Cu+ 
++0.15 
+Sn4+ + 2e– → Sn2+ 
++0.15 
+S4O6
+2– + 2e– → 2S2O3
+2–  
++0.08 
+AgBr + e– → Ag0 + Br– 
++0.07 
+NO3
+– + H2O + 2e– → NO2
+– + 2OH–  
++0.01 
+Ti4+ + e– → Ti3+ 
+0.00 
+2H+ + 2e– → H2  
+0 
+Standard Hydrogen Electrode 
+ 
+Fe3+ + 3e– → Fe0 
+-0.04 
+O2 + H2O + 2e– → HO2
+– + OH– 
+-0.08 
+Pb2+ + 2e– → Pb0 
+-0.13 
+In+ + e– → In0 
+-0.14 
+Sn2+ + 2e– → Sn0 
+-0.14 
+AgI + e– → Ag0 + I– 
+-0.15 
+Ni2+ + 2e– → Ni0 
+-0.23 
+V3+ + e– → V2+ 
+-0.26 
+ 
+
+Table 3.  Standard reduction potentials at 25oC (electrochemical series; continued). 
+ 
+ 
+Half reaction 
+E0, V 
+Co2+ + 2e– → Co0 
+-0.28 
+In3+ + 3e– → In0 
+-0.34 
+Tl+ + e– → Tl0 
+-0.34 
+PbSO4 + 2e– → Pb0 + SO4
+2– 
+-0.36 
+Ti3+ + e– → Ti2+ 
+-0.37 
+In2+ + e– → In+ 
+-0.40 
+Cd2+ + 2e– → Cd0 
+-0.40 
+Cr3+ + e– → Cr2+ 
+-0.41 
+Fe2+ + 2e– → Fe0 
+-0.44 
+In3+ + 2e– → In+ 
+-0.44 
+S + 2e– → S2– 
+-0.48 
+In3+ + e– → In2+ 
+-0.49 
+Ga+ + e– → Ga0 
+-0.53 
+O2 + e– → O2
+– 
+-0.56 
+U4+ + e– → U3+ 
+-0.61 
+Se + 2e– → Se2– 
+-0.67 
+Cr3+ + 3e– → Cr0 
+-0.74 
+Zn2+ + 2e– → Zn0 
+-0.76 
+Cd(OH)2 + 2e– → Cd0 + 2OH– 
+-0.81 
+2H2O + 2e– → H2 + 2OH– 
+-0.83 
+Te + 2e– → Te2– 
+-0.84 
+ 
+Half reaction 
+E0, V 
+Cr2+ + 2e– → Cr0 
+-0.91 
+Mn2+ + 2e– → Mn0 
+-1.18 
+V2+ + 2e– → V0 
+-1.19 
+Ti2+ + 2e– → Ti0 
+-1.63 
+Al3+ + 3e– → Al0 
+-1.66 
+U3+ + 3e– → U0 
+-1.79 
+Be2+ + 2e– → Be0 
+-1.85 
+Mg2+ + 2e– → Mg0 
+-2.36 
+Ce3+ + 3e– → Ce0 
+-2.48 
+La3+ + 3e– → La0 
+-2.52 
+Na+ + e– → Na0 
+-2.71 
+Ca2+ + 2e– → Ca0 
+-2.87 
+Sr2+ + 2e– → Sr0 
+-2.89 
+Ba2+ + 2e– → Ba0 
+-2.91 
+Ra2+ + 2e– → Ra0 
+-2.92 
+Cs+ + e– → Cs0 
+-2.92 
+Rb+ + e– → Rb0 
+-2.93 
+K+ + e– → K0 
+-2.93 
+Li+ + e– → Li0 
+-3.05 
+strongest reducer 
+ 
+ 
+ 
+ 
+ 
+Table 4.  Standard reduction potentials at 25oC (in alphabetical order by redox couple). 
+ 
+ 
+Half reaction 
+E0, V 
+Ag2+ + e– → Ag+ 
++1.98 
+Ag+ + e– → Ag0 
++0.80 
+AgBr + e– → Ag0 + Br– 
++0.07 
+AgCl + e– → Ag0 + Cl– 
++0.22 
+AgCl + e– → Ag0 + Cl– 
++0.197 
+Ag/AgCl electrode in saturated KCl 
+ 
+AgF + e– → Ag0 + F– 
++0.78 
+AgI + e– → Ag0 + I– 
+-0.15 
+Al3+ + 3e– → Al0 
+-1.66 
+H3AsO4 + 2H+ + 2e– → HAsO2 + 2H2O 
++0.56 
+Au3+ + 3e– → Au0 
++1.40 
+Au+ + e– → Au0 
++1.69 
+Ba2+ + 2e– → Ba0 
+-2.91 
+Half reaction 
+E0, V 
+Be2+ + 2e– → Be0 
+-1.85 
+Bi3+ + 3e– → Bi0 
++0.20 
+2HBrO + 2H+ + 2e– → Br2 + 2H2O 
++1.60 
+BrO– + H2O + 2e– → Br– + 2OH–  
++0.76 
+Br2 + 2e– → 2Br– 
++1.09 
+Ca2+ + 2e– → Ca0 
+-2.87 
+Cd2+ + 2e– → Cd0 
+-0.40 
+Cd(OH)2 + 2e– → Cd0 + 2OH– 
+-0.81 
+Ce4+ + e– → Ce3+ 
++1.61 
+Ce3+ + 3e– → Ce0 
+-2.48 
+ClO4
+– + 2H+ + 2e– → ClO3
+– + H2O 
++1.23 
+ClO4
+– + H2O + 2e– → ClO3
+– + 2OH– 
++0.36 
+2HClO + 2H+ + 2e– → Cl2 + 2H2O 
++1.63 
+
+Table 4. Standard reduction potentials at 25oC (in alphabetical order by redox couple; 
+continued). 
+ 
+ 
+ 
+ 
+Half reaction 
+E0, V 
+ClO– + H2O + 2e– → Cl– + 2OH–  
++0.89 
+Cl2 + 2e– → 2Cl– 
++1.36 
+Co3+ + e– → Co2+ 
++1.81 
+Co2+ + 2e– → Co0 
+-0.28 
+Cr2O7
+2– + 14H+ + 6e– → 2Cr3+ + 7H2O 
++1.33 
+Cr3+ + e– → Cr2+ 
+-0.41 
+Cr3+ + 3e– → Cr0 
+-0.74 
+Cr2+ + 2e– → Cr0 
+-0.91 
+Cs+ + e– → Cs0 
+-2.92 
+Cu2+ + e– → Cu+ 
++0.15 
+Cu2+ + I– + e– → CuI  
++0.86 
+Cu2+ + 2e– → Cu0 
++0.34 
+Cu+ + e– → Cu0 
++0.52 
+F2 + 2e– → 2F– 
++2.87 
+Fe3+ + e– → Fe2+ 
++0.77 
+Fe3+ + 3e– → Fe0 
+-0.04 
+Fe2+ + 2e– → Fe0 
+-0.44 
+Ga+ + e– → Ga0 
+-0.53 
+2H+ + 2e– → H2   
+0 
+Standard Hydrogen Electrode 
+ 
+2H2O + 2e– → H2 + 2OH– 
+-0.83 
+2Hg2+ + 2e– → Hg2
+2+ 
++0.92 
+Hg2+ + 2e– → Hg0 
++1.62 
+Hg2
+2+ + 2e– → 2Hg0 
++0.79 
+Hg2Cl2 + 2e– → 2Hg0 + 2Cl– 
++0.27 
+Hg2Cl2 + 2e– → 2Hg0 + 2Cl– 
++0.241 
+Saturated Calomel Electrode 
+ 
+2IO3
+– +12H+ + 10e– → I2 + 6H2O 
++1.20 
+I2 + 2e– → 2I– 
++0.54 
+I3
+– + 2e– → 3I– 
++0.53 
+In3+ + e– → In2+ 
+-0.49 
+In3+ + 2e– → In+ 
+-0.44 
+In3+ + 3e– → In0 
+-0.34 
+In2+ + e– → In+ 
+-0.40 
+In+ + e– → In0 
+-0.14 
+K+ + e– → K0 
+-2.93 
+La3+ + 3e– → La0 
+-2.52 
+Half reaction 
+E0, V 
+Li+ + e– → Li0 
+-3.05 
+Mg2+ + 2e– → Mg0 
+-2.36 
+MnO4
+– + e– → MnO4
+2– 
++0.56 
+MnO4
+– + 4H+ + 3e– → MnO2 + 2H2O 
++1.70 
+MnO4
+– + 8H+ + 5e– → Mn2+ + 4H2O 
++1.51 
+MnO4
+2– + 2H2O + 2e– → MnO2 + 4OH– 
++0.60 
+MnO2 + 4H+ + 2e– → Mn2+ + 2H2O 
++1.23 
+Mn3+ + e– → Mn2+ 
++1.51 
+Mn2+ + 2e– → Mn0 
+-1.18 
+NO3
+– + 2H+ + e– → NO2 + H2O 
++0.80 
+NO3
+– + H2O + 2e– → NO2
+– + 2OH–  
++0.01 
+NO3
+– + 4H+ + 3e– → NO + 2H2O 
++0.96 
+Na+ + e– → Na0 
+-2.71 
+NiO(OH) + H2O + e– → Ni(OH)2 + OH– 
++0.49 
+Ni2+ + 2e– → Ni0 
+-0.23 
+O2 + e– → O2
+– 
+-0.56 
+O2 + H2O + 2e– → HO2
+– + OH– 
+-0.08 
+O2 + 2H+ + 2e– → H2O2 
++0.68 
+O2 + 4H+ + 4e– → 2H2O 
++1.23 
+O2 + 2H2O + 4e– → 4OH–  
++0.40 
+O3 + 2H+ + 2e– → O2 + H2O 
++2.07 
+O3 + H2O + 2e– → O2 + 2OH– 
++1.24 
+H2O2 + 2H+ + 2e– → 2H2O 
++1.78 
+H2O2 + 2e– → 2OH–  
++0.88 
+Pb4+ + 2e– → Pb2+ 
++1.67 
+Pb2+ + 2e– → Pb0 
+-0.13 
+PbSO4 + 2e– → Pb0 + SO4
+2– 
+-0.36 
+Pt2+ + 2e– → Pt0 
++1.20 
+Pu4+ + e– → Pu3+ 
++0.97 
+Ra2+ + 2e– → Ra0 
+-2.92 
+Rb+ + e– → Rb0 
+-2.93 
+S2O8
+2– + 2e– → 2SO4
+2– 
++2.05 
+SO4
+2– + 4H+ + 2e– → H2SO3 + H2O 
++0.17 
+S4O6
+2– + 2e– → 2S2O3
+2–  
++0.08 
+S + 2e– → S2– 
+-0.48 
+Se + 2e– → Se2– 
+-0.67 
+Sn4+ + 2e– → Sn2+ 
++0.15 
+
+Table 4. Standard reduction potentials at 25oC (in alphabetical order by redox couple; 
+continued). 
+ 
+ 
+ 
+ 
+ 
+Half reaction 
+E0, V 
+Sn2+ + 2e– → Sn0 
+-0.14 
+Sr2+ + 2e– → Sr0 
+-2.89 
+Te + 2e– → Te2– 
+-0.84 
+Ti4+ + e– → Ti3+ 
+0.00 
+Ti3+ + e– → Ti2+ 
+-0.37 
+Ti2+ + 2e– → Ti0 
+-1.63 
+Tl+ + e– → Tl0 
+-0.34 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Half reaction 
+E0, V 
+U4+ + e– → U3+ 
+-0.61 
+U3+ + 3e– → U0 
+-1.79 
+V3+ + e– → V2+ 
+-0.26 
+V2+ + 2e– → V0 
+-1.19 
+H4XeO6 + 2H+ + 2e– → XeO3 + 3H2O 
++3.0 
+Zn2+ + 2e– → Zn0 
+-0.76 
+ 
+ 
+ 

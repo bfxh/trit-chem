@@ -1,0 +1,13 @@
+[package]
+name = "trit-chem-core"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish = false
+description = "Deterministic, dependency-free thermochemistry and reaction engine for AE-ENGINE F0"
+
+[lints]
+workspace = true
+
+[dependencies]
