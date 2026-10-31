@@ -79,6 +79,15 @@ looks plausible in spot checks; the self-consistency test catches it.
 * If a temperature falls outside every fitted range, the nearest block is used
   and the result is extrapolated. This is a documented approximation, not an
   error state. Water vapour, for example, has no NIST fit below 500 K.
+* Each NIST block is already referenced to H(298.15), so `H(T)-H(298.15)` is
+  taken straight from the block covering T. Subtracting the same block's value
+  at 298.15 would extrapolate it outside its range and put a step at every
+  range boundary (measured 3.1 kJ/mol for CO2 at 1200 K before the fix).
+* `S(T)-S(298.15)` is integrated numerically as `integral Cp/T` (48-point
+  Simpson). Using the blocks' absolute entropies directly also steps at range
+  boundaries, because only the first block is anchored at the tabulated
+  entropy. The integration reproduces NIST-JANAF S(1000 K) to within 0.1 J/K
+  for CO2 and H2O(g).
 * Aqueous ions use `Cp = 0`. Standard partial molar heat capacities of ions are
   small and frequently negative; pretending they are zero is better than
   inventing values, but it means ion thermodynamics is a 25 C tool.

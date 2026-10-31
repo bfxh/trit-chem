@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.2.1 (2026-10-31) — Shomate boundary fix, lime-kiln demo
+
+### Fixed
+
+- `H(T)-H(298.15)` no longer subtracts a same-block value at 298.15 K. Each NIST
+  block is already referenced to 298.15; the old code extrapolated the block
+  covering T back to 298.15 and produced a step at every range boundary
+  (CO2 at 1200 K: 3.1 kJ/mol).
+- `S(T)-S(298.15)` is now integrated as `integral Cp/T` (48-point Simpson)
+  instead of subtracting block entropies, for the same reason. Matches
+  NIST-JANAF S(1000 K) for CO2 and H2O(g) within 0.1 J/(mol K).
+
+### Added
+
+- `CaO(s)` (NBS 25 C values + NIST Shomate fit).
+- `trit-chem-cli kiln`: CaCO3 -> CaO + CO2 over 298-1600 K. dG(298) = +130.4
+  kJ/mol, zero crossing at 1073 K, endothermic throughout.
+- `tests/calcination.rs`: standard values, monotone dG, crossing bracket,
+  entropy check against JANAF.
+
 ## 0.2.0 (2026-10-31) — ionic-strength activity coefficients
 
 ### Added

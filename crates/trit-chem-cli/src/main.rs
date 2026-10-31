@@ -2,6 +2,7 @@
 
 use trit_chem_core::element;
 use trit_chem_core::equilibrium;
+use trit_chem_core::reaction::{Reaction, Term};
 use trit_chem_core::rules;
 use trit_chem_core::species::Db;
 use trit_chem_core::state::State;
@@ -12,6 +13,7 @@ fn main() {
     let cmd = args.first().map(String::as_str).unwrap_or("demo");
     match cmd {
         "demo" => demo(),
+        "kiln" => kiln(),
         "check" => check(),
         "elements" => {
             for a in &args[1..] {
@@ -54,7 +56,7 @@ fn main() {
             }
         }
         other => {
-            eprintln!("unknown command {other:?}; use demo | check | elements | thermo");
+            eprintln!("unknown command {other:?}; use demo | kiln | check | elements | thermo");
             std::process::exit(2);
         }
     }
@@ -173,4 +175,46 @@ fn check() {
         "checked {n} condensed/gas species; worst |dGcalc - dGtab| = {:.3} kJ/mol ({})",
         worst.0, worst.1
     );
+}
+
+fn kiln() {
+    let db = Db::standard();
+    let rxn = Reaction::new(
+        &db,
+        "CaCO3(s) -> CaO(s) + CO2(g)",
+        vec![
+            Term::new(db.require("CaCO3(s,calcite)"), -1.0),
+            Term::new(db.require("CaO(s)"), 1.0),
+            Term::new(db.require("CO2(g)"), 1.0),
+        ],
+    )
+    .expect("calcination balances");
+    println!("{}  (lime kiln)", rxn.label);
+    println!(
+        "{:>8}  {:>10}  {:>10}  {:>10}",
+        "T/K", "dG/kJ", "dH/kJ", "T*dS/kJ"
+    );
+    for t in [298.15, 600.0, 800.0, 1000.0, 1100.0, 1200.0, 1400.0, 1600.0] {
+        println!(
+            "{:8.1}  {:10.2}  {:10.2}  {:10.2}",
+            t,
+            rxn.dg_standard(&db, t),
+            rxn.dh_standard(&db, t),
+            t * rxn.ds_standard(&db, t) / 1000.0
+        );
+    }
+    let (mut lo, mut hi) = (298.15_f64, 2000.0_f64);
+    if rxn.dg_standard(&db, hi) > 0.0 {
+        println!("no zero crossing below 2000 K");
+        return;
+    }
+    for _ in 0..60 {
+        let mid = 0.5 * (lo + hi);
+        if rxn.dg_standard(&db, mid) > 0.0 {
+            lo = mid;
+        } else {
+            hi = mid;
+        }
+    }
+    println!("dG0 crosses zero at {:.0} K", 0.5 * (lo + hi));
 }

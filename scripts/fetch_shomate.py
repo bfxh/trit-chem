@@ -26,6 +26,8 @@ TARGETS = [
     ("Zn(s)", "C7440666", 2), ("C(s,graphite)", "C7782425", 2),
     ("SiO2(s)", "C7631869", 2), ("Al2O3(s)", "C1344281", 2), ("CaCO3(s)", "C471341", 2),
     ("H2SO4(l)", "C7664939", 2), ("S(s,rhombic)", "C7704349", 2),
+    ("Fe2O3(s)", "C1309371", 2), ("Fe3O4(s)", "C1317619", 2),
+    ("CaO(s)", "C1305788", 2), ("Ca(OH)2(s)", "C1305620", 2),
 ]
 
 SECTION = re.compile(r"(Gas|Liquid|Solid) Phase Heat Capacity \(Shomate Equation\)")

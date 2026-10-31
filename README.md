@@ -11,6 +11,7 @@ Status: **M0, local only, not published.** 28 tests pass (`cargo test --workspac
 
 ```text
 $ cargo run -p trit-chem-cli -- demo
+cargo run -p trit-chem-cli -- kiln      # CaCO3 -> CaO + CO2 over temperature
 
 == ranked by standard dG at 298.15 K (kJ per extent unit) ==
  -523.820  2Na(s) + 2H+(aq) -> 2Na+(aq) + H2(g)
@@ -46,6 +47,7 @@ Delivered in M0:
 ```text
 cargo test --workspace
 cargo run -p trit-chem-cli -- demo
+cargo run -p trit-chem-cli -- kiln      # CaCO3 -> CaO + CO2 over temperature
 cargo run -p trit-chem-cli -- thermo "H2O(l)" "NaCl(s)"
 cargo run -p trit-chem-cli -- check     # data self-consistency
 ```

@@ -428,8 +428,25 @@ static SHOMATE_S_S_RHOMBIC_: [ShomateBlock; 4] = [
     },
 ];
 
+static SHOMATE_CAO_S_: [ShomateBlock; 2] = [
+    ShomateBlock {
+        lo: 298.0,
+        hi: 3200.0,
+        a: [
+            49.95403, 4.887916, -0.352056, 0.046187, -0.825097, -652.9718, 92.56096, -635.0894,
+        ],
+    },
+    ShomateBlock {
+        lo: 3200.0,
+        hi: 4500.0,
+        a: [
+            62.76, 4.629681, -1.092037, 8.966312, 6.504656, -591.8059, 116.8909, -557.3339,
+        ],
+    },
+];
+
 /// Built-in species table, ordered as listed in scripts/gen_thermo.py.
-pub static SPECIES: [Species; 50] = [
+pub static SPECIES: [Species; 51] = [
     Species {
         id: "H2(g)",
         formula: "H2",
@@ -681,6 +698,17 @@ pub static SPECIES: [Species; 50] = [
         s298: 92.9,
         cp: Cp::Const(81.88),
         dgf298: Some(-1128.8),
+        source: "NBS/CODATA 25 C table (data/external/thermo_table.txt)",
+    },
+    Species {
+        id: "CaO(s)",
+        formula: "CaO",
+        phase: Phase::Solid,
+        charge: 0,
+        hf298: -635.09,
+        s298: 39.79,
+        cp: Cp::Shomate(&SHOMATE_CAO_S_),
+        dgf298: Some(-604.03),
         source: "NBS/CODATA 25 C table (data/external/thermo_table.txt)",
     },
     Species {

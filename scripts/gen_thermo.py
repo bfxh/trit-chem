@@ -45,6 +45,7 @@ SPECIES = [
     ("S(s,rhombic)", "S", "solid", 0, 0.0, 0.0, 31.80, SRC_JANAF),
     ("C(s,graphite)", "C", "solid", 0, 0.0, 0.0, 5.740, SRC_JANAF),
     ("CaCO3(s,calcite)", "CaCO3", "solid", 0, -1206.9, -1128.8, 92.9, SRC_NBS),
+    ("CaO(s)", "CaO", "solid", 0, -635.09, -604.03, 39.79, SRC_NBS),
     ("SiO2(s,quartz)", "SiO2", "solid", 0, -910.94, -856.64, 41.84, SRC_NBS),
     ("Al(s)", "Al", "solid", 0, 0.0, 0.0, 28.33, SRC_NBS),
     ("Ca(s)", "Ca", "solid", 0, 0.0, 0.0, 41.42, SRC_NBS),

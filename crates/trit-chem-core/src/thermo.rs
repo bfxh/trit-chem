@@ -54,7 +54,9 @@ impl ShomateBlock {
             - self.a[7]
     }
 
-    /// Standard entropy in J/(mol K).
+    /// Absolute standard entropy in J/(mol K); used only by the unit test that
+    /// checks the fits against tabulated values.
+    #[cfg(test)]
     fn s_abs(&self, t: f64) -> f64 {
         let x = self.t(t);
         self.a[0] * x.ln() + self.a[1] * x + self.a[2] * x * x / 2.0 + self.a[3] * x * x * x / 3.0
@@ -100,23 +102,46 @@ impl Cp {
     pub fn h_rel_kj(&self, t: f64) -> f64 {
         match self {
             Cp::Const(c) => c * (t - T0) / 1000.0,
+            // Each NIST block is already referenced to H(298.15), so use it
+            // directly. Subtracting a value from the *same* block at 298.15
+            // would extrapolate that block outside its range and put a step in
+            // H(T) at every range boundary (measured: 3.1 kJ/mol for CO2 at
+            // 1200 K before this fix).
             Cp::Shomate(_) => match self.block_for(t) {
-                Some(b) => b.h_rel(t) - b.h_rel(T0),
+                Some(b) => b.h_rel(t),
                 None => 0.0,
             },
         }
     }
 
     /// `S(T) - S(298.15)` in J/(mol K).
+    ///
+    /// Shomate blocks give absolute entropy, but the reference value for the
+    /// *first* block only equals the tabulated `S(298.15)`; for a higher block
+    /// `s_abs(298.15)` is an extrapolation and would put a step in S(T) at the
+    /// range boundary. Integrate `Cp/T` from 298.15 instead: continuous across
+    /// ranges and anchored at the tabulated entropy.
     pub fn s_rel(&self, t: f64) -> f64 {
         match self {
             Cp::Const(c) => c * (t / T0).ln(),
-            Cp::Shomate(_) => match self.block_for(t) {
-                Some(b) => b.s_abs(t) - b.s_abs(T0),
-                None => 0.0,
-            },
+            Cp::Shomate(_) => integrate(|x| self.cp(x) / x, T0, t, 48),
         }
     }
+}
+
+/// Composite Simpson integration with a fixed even number of intervals.
+///
+/// Used for `S(T) - S(298.15)`; 48 intervals keep the error far below the 0.01
+/// J/(mol K) that matters, at ~50 Cp evaluations per call. If `s()` ever shows
+/// up in a hot loop, cache it per (species, temperature).
+fn integrate<F: Fn(f64) -> f64>(f: F, a: f64, b: f64, n: usize) -> f64 {
+    let n = n.max(2) & !1;
+    let h = (b - a) / n as f64;
+    let mut sum = f(a) + f(b);
+    for k in 1..n {
+        sum += f(a + h * k as f64) * if k % 2 == 1 { 4.0 } else { 2.0 };
+    }
+    sum * h / 3.0
 }
 
 #[cfg(test)]
