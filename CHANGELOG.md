@@ -1,5 +1,32 @@
 # Changelog
 
+## 0.3.0 (2026-10-31) — water phase transitions
+
+### Added
+
+- `H2O(s)` (ice Ih) and the six water transitions as reactions
+  (`rules::water_transitions`): melting/freezing, evaporation/condensation,
+  sublimation/deposition. Both directions are present because the cascade only
+  moves downhill.
+- `trit-chem-cli phase`: equilibrium composition of 1 mol water in a 10 L
+  headspace from 250 to 450 K.
+- `tests/phase.rs`: ice stable below 0 C, liquid above, melting bracketed within
+  0.3 K, saturation pressure at five temperatures, triple-point pressure,
+  transition enthalpies.
+
+### Verified
+
+- p_sat: 0.0317 bar at 25 C (ref 0.03169), 0.9988 at 100 C (ref 1.01325),
+  triple point 0.0061 bar (ref 0.00611).
+- dH_fus = 6.01 kJ/mol (ref 6.008), dH_vap ~ 40.7 (ref 40.66).
+
+### Notes
+
+- Ice is not stable at 298 K, so its dGf(298.15) is anchored to the measured
+  melting point rather than extrapolated. The dGf recomputation check still
+  passes.
+- Limits: ice Ih only, no volume change, no supercooling.
+
 ## 0.2.1 (2026-10-31) — Shomate boundary fix, lime-kiln demo
 
 ### Fixed

@@ -127,7 +127,51 @@ Two consequences worth knowing:
   monotone in extent. The extent solver scans 32 points for the first sign
   change and bisects inside it instead of assuming monotonicity.
 
-## 4. Audit of the AE-ENGINE v7.1 F0 numbers
+## 4. Phase transitions
+
+Phase transitions are ordinary reactions between phase-specific species, so
+they run through the same cascade:
+
+| reaction | meaning |
+| --- | --- |
+| H2O(s) -> H2O(l) | melting |
+| H2O(l) -> H2O(g) | evaporation |
+| H2O(s) -> H2O(g) | sublimation |
+| the three reverse directions | freezing, condensation, deposition |
+
+Both directions must be in the network because the cascade only moves downhill.
+
+Ice data is *derived*, not tabulated at 298.15 K, because ice is not stable
+there. dHf is anchored to the measured heat of fusion (6.008 kJ/mol at
+273.15 K) with a constant Cp of 38.0 J/(mol K); dGf(298.15) is then chosen so
+that `G_ice = G_liquid` at 273.15 K exactly. That keeps the species row
+self-consistent (the dGf recomputation check still passes) and puts the
+transition temperatures where they belong instead of ~0.5 K off.
+
+Validation (`tests/phase.rs`):
+
+| quantity | model | reference |
+| --- | ---: | ---: |
+| dG_fus sign | + at 272 K, - at 274 K | melts at 273.15 K |
+| p_sat(283.15 K) | 0.0123 bar | 0.01228 |
+| p_sat(298.15 K) | 0.0317 | 0.03169 |
+| p_sat(323.15 K) | 0.1231 | 0.12352 |
+| p_sat(353.15 K) | 0.4699 | 0.47144 |
+| p_sat(373.15 K) | 0.9988 | 1.01325 (1.4% low) |
+| triple-point p(273.15 K) | 0.0061 | 0.00611 |
+| dH_fus(273.15 K) | 6.01 kJ | 6.008 |
+| dH_vap(373.15 K) | ~40.7 kJ | 40.66 |
+
+`trit-chem-cli phase` prints the equilibrium composition of 1 mol of water in a
+10 L headspace from 250 to 450 K.
+
+Limits: ice Ih only (no other polymorphs); no volume change on melting or
+freezing (the liquid volume is held fixed); no supercooling or nucleation
+barrier, so the cascade jumps straight to the stable phase. The saturation
+pressure comes from ideal-gas and ideal-solution thermodynamics, which is why
+it is 1-3% low near the boiling point.
+
+## 5. Audit of the AE-ENGINE v7.1 F0 numbers
 
 The draft claims the F0 acceptance scenario is
 `钠+盐酸→H₂（ΔG=-402 优先），HCl 耗尽后钠+水（ΔG=-368）`.
@@ -156,7 +200,7 @@ The table stores `outer_shell_electrons` (the outermost shell) and
 `oxidation_states` separately; d-block elements have more valence electrons than
 their outer shell population.
 
-## 5. What "first principles" can and cannot mean here
+## 6. What "first principles" can and cannot mean here
 
 The draft says "reaction/function is computed, not looked up" and rejects
 preset reaction tables. The engine honours the spirit, with one unavoidable
@@ -174,7 +218,7 @@ qualification:
 So "no preset reaction table" is achievable; "no preset species data" is not,
 and the draft should say so.
 
-## 6. Roadmap
+## 7. Roadmap
 
 M1 (correctness within the current model):
 

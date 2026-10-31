@@ -6,7 +6,7 @@ use trit_chem_core::reaction::{Reaction, Term};
 use trit_chem_core::rules;
 use trit_chem_core::species::Db;
 use trit_chem_core::state::State;
-use trit_chem_core::thermo::T0;
+use trit_chem_core::thermo::{R, T0};
 
 fn main() {
     let args: Vec<String> = std::env::args().skip(1).collect();
@@ -14,6 +14,7 @@ fn main() {
     match cmd {
         "demo" => demo(),
         "kiln" => kiln(),
+        "phase" => phase(),
         "check" => check(),
         "elements" => {
             for a in &args[1..] {
@@ -56,7 +57,9 @@ fn main() {
             }
         }
         other => {
-            eprintln!("unknown command {other:?}; use demo | kiln | check | elements | thermo");
+            eprintln!(
+                "unknown command {other:?}; use demo | kiln | phase | check | elements | thermo"
+            );
             std::process::exit(2);
         }
     }
@@ -217,4 +220,32 @@ fn kiln() {
         }
     }
     println!("dG0 crosses zero at {:.0} K", 0.5 * (lo + hi));
+}
+
+fn phase() {
+    let db = Db::standard();
+    let (ice, liq, gas) = (
+        db.require("H2O(s)"),
+        db.require("H2O(l)"),
+        db.require("H2O(g)"),
+    );
+    let net = rules::water_transitions(&db);
+    println!("1 mol water, 10 L headspace, six phase transitions");
+    println!(
+        "{:>8}  {:>10}  {:>10}  {:>10}  {:>9}",
+        "T/K", "ice/mol", "liq/mol", "gas/mol", "p/bar"
+    );
+    for t in [
+        250.0, 263.15, 273.15, 283.15, 298.15, 323.15, 353.15, 373.15, 400.0, 450.0,
+    ] {
+        let mut st = State::new(&db, t, 0.018, 10.0);
+        st.add(liq, 1.0);
+        let rep = equilibrium::relax(&db, &mut st, &net, 128, 1e-14);
+        assert!(rep.converged, "{t}: {rep:?}");
+        let p = st.n[gas] * R * t / (st.gas_l * 1e-3) / 1e5;
+        println!(
+            "{:8.2}  {:10.6}  {:10.6}  {:10.6}  {:9.4}",
+            t, st.n[ice], st.n[liq], st.n[gas], p
+        );
+    }
 }

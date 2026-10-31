@@ -446,7 +446,7 @@ static SHOMATE_CAO_S_: [ShomateBlock; 2] = [
 ];
 
 /// Built-in species table, ordered as listed in scripts/gen_thermo.py.
-pub static SPECIES: [Species; 51] = [
+pub static SPECIES: [Species; 52] = [
     Species {
         id: "H2(g)",
         formula: "H2",
@@ -578,6 +578,17 @@ pub static SPECIES: [Species; 51] = [
         cp: Cp::Shomate(&SHOMATE_H2O_L_),
         dgf298: Some(-237.13),
         source: "NIST-JANAF 4th ed. (Chase 1998) via NIST WebBook",
+    },
+    Species {
+        id: "H2O(s)",
+        formula: "H2O",
+        phase: Phase::Solid,
+        charge: 0,
+        hf298: -292.77,
+        s298: 44.65,
+        cp: Cp::Const(38.0),
+        dgf298: Some(-236.538),
+        source: "derived: NBS 25 C liquid + dH_fus(273.15)=6.008 kJ, Cp=38.0, dGf anchored at the measured melting point",
     },
     Species {
         id: "H2SO4(l)",

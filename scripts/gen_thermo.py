@@ -34,6 +34,7 @@ SPECIES = [
     ("SO2(g)", "SO2", "gas", 0, -296.83, -300.19, 248.22, SRC_JANAF),
     ("HCl(g)", "HCl", "gas", 0, -92.31, -95.30, 186.91, SRC_JANAF),
     ("H2O(l)", "H2O", "liquid", 0, -285.83, -237.13, 69.91, SRC_JANAF),
+    ("H2O(s)", "H2O", "solid", 0, -292.77, -236.538, 44.65, "derived: NBS 25 C liquid + dH_fus(273.15)=6.008 kJ, Cp=38.0, dGf anchored at the measured melting point"),
     ("H2SO4(l)", "H2SO4", "liquid", 0, -813.99, -690.00, 156.90, SRC_NBS),
     ("Na(s)", "Na", "solid", 0, 0.0, 0.0, 51.21, SRC_JANAF),
     ("NaCl(s)", "NaCl", "solid", 0, -411.15, -384.12, 72.13, SRC_JANAF),
@@ -78,6 +79,7 @@ SPECIES = [
 
 # Fallback constant Cp (J/mol/K) where NIST has no Shomate block for M0.
 CP_CONST = {
+    "H2O(s)": 38.0,
     "C(s,graphite)": 8.527,
     "CaCO3(s,calcite)": 81.88,
     "SiO2(s,quartz)": 44.59,

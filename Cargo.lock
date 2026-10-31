@@ -4,11 +4,11 @@ version = 4
 
 [[package]]
 name = "trit-chem-cli"
-version = "0.2.1"
+version = "0.3.0"
 dependencies = [
  "trit-chem-core",
 ]
 
 [[package]]
 name = "trit-chem-core"
-version = "0.2.1"
+version = "0.3.0"

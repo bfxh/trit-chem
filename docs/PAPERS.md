@@ -24,6 +24,11 @@ Equilibrium Compositions and Applications.** NASA RP-1311 (1994).
 CEA: element-potential equilibrium with condensed phases. The reference
 implementation for M2.
 
+**NIST WebBook phase-change data** (TRC compilation: normal boiling point,
+triple point, critical point, heats of fusion and vaporisation).
+<https://webbook.nist.gov/chemistry/> — used to anchor the ice row and to check
+the saturation pressures in `tests/phase.rs`.
+
 **D. D. Wagman et al., The NBS Tables of Chemical Thermodynamic Properties.**
 J. Phys. Chem. Ref. Data 11, Suppl. 2 (1982). *Citation only.* Source of the
 aqueous-ion values (and of the electron-convention caveat in DESIGN.md §2.1).

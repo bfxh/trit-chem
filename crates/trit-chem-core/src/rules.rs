@@ -176,6 +176,29 @@ fn gcd(a: i32, b: i32) -> i32 {
     if b == 0 { a.abs() } else { gcd(b, a % b) }
 }
 
+/// The six water phase transitions, each as its own forward reaction.
+///
+/// The cascade only moves downhill, so freezing and melting (and evaporation
+/// and condensation, sublimation and deposition) must both be present; the
+/// direction with negative dG is the one that runs.
+pub fn water_transitions(db: &Db) -> Vec<Reaction> {
+    let ice = db.require("H2O(s)");
+    let liq = db.require("H2O(l)");
+    let gas = db.require("H2O(g)");
+    let pairs = [
+        (liq, ice),
+        (ice, liq),
+        (liq, gas),
+        (gas, liq),
+        (ice, gas),
+        (gas, ice),
+    ];
+    pairs
+        .into_iter()
+        .filter_map(|(from, to)| build(db, vec![(from, -1.0), (to, 1.0)]).ok())
+        .collect()
+}
+
 /// All rules that can be instantiated for `metal_z` with the built-in table.
 pub fn candidates_for_metal(db: &Db, metal_z: u8) -> Vec<Reaction> {
     let Some(sym) = element::by_z(metal_z).map(|e| e.symbol) else {
