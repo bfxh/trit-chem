@@ -224,41 +224,23 @@ static SHOMATE_H2O_L_: [ShomateBlock; 1] = [ShomateBlock {
     ],
 }];
 
-static SHOMATE_NA_S_: [ShomateBlock; 2] = [
-    ShomateBlock {
-        lo: 298.0,
-        hi: 370.0,
-        a: [
-            72.63675, -9.491572, -730.9322, 1414.518, -1.259377, -21.79467, 155.0963, 0.0,
-        ],
-    },
-    ShomateBlock {
-        lo: 370.98,
-        hi: 1170.525,
-        a: [
-            40.25707, -28.23849, 20.69402, -3.641872, -0.079874, -8.7823, 113.6646, 2.406001,
-        ],
-    },
-];
+static SHOMATE_NA_S_: [ShomateBlock; 1] = [ShomateBlock {
+    lo: 298.0,
+    hi: 370.0,
+    a: [
+        72.63675, -9.491572, -730.9322, 1414.518, -1.259377, -21.79467, 155.0963, 0.0,
+    ],
+}];
 
-static SHOMATE_NACL_S_: [ShomateBlock; 2] = [
-    ShomateBlock {
-        lo: 298.0,
-        hi: 1073.0,
-        a: [
-            50.72389, 6.672267, -2.517167, 10.15934, -0.200675, -427.2115, 130.3973, -411.1203,
-        ],
-    },
-    ShomateBlock {
-        lo: 1074.0,
-        hi: 2500.0,
-        a: [
-            -42.4478, 113.526, -43.6466, 5.89663, 39.1386, -305.561, 91.0639, -385.923,
-        ],
-    },
-];
+static SHOMATE_NACL_S_: [ShomateBlock; 1] = [ShomateBlock {
+    lo: 298.0,
+    hi: 1073.0,
+    a: [
+        50.72389, 6.672267, -2.517167, 10.15934, -0.200675, -427.2115, 130.3973, -411.1203,
+    ],
+}];
 
-static SHOMATE_NAOH_S_: [ShomateBlock; 3] = [
+static SHOMATE_NAOH_S_: [ShomateBlock; 2] = [
     ShomateBlock {
         lo: 298.0,
         hi: 572.0,
@@ -271,16 +253,9 @@ static SHOMATE_NAOH_S_: [ShomateBlock; 3] = [
         hi: 596.0,
         a: [86.02304, 0.0, 0.0, 0.0, 0.0, -448.8512, 169.6281, -425.9312],
     },
-    ShomateBlock {
-        lo: 596.0,
-        hi: 2500.0,
-        a: [
-            88.34725, -2.495103, -3.013028, 0.862607, 0.042216, -442.935, 183.932, -416.8783,
-        ],
-    },
 ];
 
-static SHOMATE_FE_S_: [ShomateBlock; 6] = [
+static SHOMATE_FE_S_: [ShomateBlock; 5] = [
     ShomateBlock {
         lo: 298.0,
         hi: 700.0,
@@ -316,50 +291,25 @@ static SHOMATE_FE_S_: [ShomateBlock; 6] = [
             -776.7387, 919.4005, -383.7184, 57.08148, 242.1369, 697.6234, -558.3674, 0.0,
         ],
     },
-    ShomateBlock {
-        lo: 1809.0,
-        hi: 3133.345,
-        a: [
-            46.024, -1.884667, 6.09475, -6.640301, -8.246121, -10.80543, 72.54094, 12.39502,
-        ],
-    },
 ];
 
-static SHOMATE_CU_S_: [ShomateBlock; 2] = [
-    ShomateBlock {
-        lo: 298.0,
-        hi: 1358.0,
-        a: [
-            17.72891, 28.0987, -31.25289, 13.97243, 0.068611, -6.056591, 47.89592, 0.0,
-        ],
-    },
-    ShomateBlock {
-        lo: 1358.0,
-        hi: 2843.0,
-        a: [
-            32.8445, -8.4e-05, 3.2e-05, -4e-06, -2.8e-05, -1.804901, 73.9231, 11.8573,
-        ],
-    },
-];
+static SHOMATE_CU_S_: [ShomateBlock; 1] = [ShomateBlock {
+    lo: 298.0,
+    hi: 1358.0,
+    a: [
+        17.72891, 28.0987, -31.25289, 13.97243, 0.068611, -6.056591, 47.89592, 0.0,
+    ],
+}];
 
-static SHOMATE_ZN_S_: [ShomateBlock; 2] = [
-    ShomateBlock {
-        lo: 298.0,
-        hi: 692.73,
-        a: [
-            25.60123, -4.405292, 20.42206, -7.399697, -0.045801, -7.755964, 72.91373, 0.0,
-        ],
-    },
-    ShomateBlock {
-        lo: 692.73,
-        hi: 1180.173,
-        a: [
-            31.38004, -9.647635, 6.798541, -1.574453, -3.249003, -3.590873, 86.6816, 6.519007,
-        ],
-    },
-];
+static SHOMATE_ZN_S_: [ShomateBlock; 1] = [ShomateBlock {
+    lo: 298.0,
+    hi: 692.73,
+    a: [
+        25.60123, -4.405292, 20.42206, -7.399697, -0.045801, -7.755964, 72.91373, 0.0,
+    ],
+}];
 
-static SHOMATE_AL2O3_S_: [ShomateBlock; 5] = [
+static SHOMATE_AL2O3_S_: [ShomateBlock; 4] = [
     ShomateBlock {
         lo: 298.0,
         hi: 2327.0,
@@ -388,16 +338,9 @@ static SHOMATE_AL2O3_S_: [ShomateBlock; 5] = [
             106.088, 36.3374, -13.8673, 2.141221, -3.133231, -1705.97, 153.935, -1662.3,
         ],
     },
-    ShomateBlock {
-        lo: 2327.0,
-        hi: 4000.0,
-        a: [
-            192.464, 9.519856, -2.858928, 2.929147, 5.599405, -1757.711, 177.1008, -1620.568,
-        ],
-    },
 ];
 
-static SHOMATE_S_S_RHOMBIC_: [ShomateBlock; 4] = [
+static SHOMATE_S_S_RHOMBIC_: [ShomateBlock; 2] = [
     ShomateBlock {
         lo: 298.0,
         hi: 388.36,
@@ -412,41 +355,18 @@ static SHOMATE_S_S_RHOMBIC_: [ShomateBlock; 4] = [
             24.23749, -4.98306, 33.009, -15.29616, -0.182237, -7.516263, 61.49141, 0.360001,
         ],
     },
-    ShomateBlock {
-        lo: 388.36,
-        hi: 432.0,
-        a: [
-            -4540.97, 26065.6, -55520.7, 42012.2, 54.5886, 787.807, -10826.3, 1.853781,
-        ],
-    },
-    ShomateBlock {
-        lo: 432.0,
-        hi: 882.117,
-        a: [
-            -37.9335, 133.242, -95.3245, 24.0094, 7.65453, 29.7881, -13.1534, 1.853781,
-        ],
-    },
 ];
 
-static SHOMATE_CAO_S_: [ShomateBlock; 2] = [
-    ShomateBlock {
-        lo: 298.0,
-        hi: 3200.0,
-        a: [
-            49.95403, 4.887916, -0.352056, 0.046187, -0.825097, -652.9718, 92.56096, -635.0894,
-        ],
-    },
-    ShomateBlock {
-        lo: 3200.0,
-        hi: 4500.0,
-        a: [
-            62.76, 4.629681, -1.092037, 8.966312, 6.504656, -591.8059, 116.8909, -557.3339,
-        ],
-    },
-];
+static SHOMATE_CAO_S_: [ShomateBlock; 1] = [ShomateBlock {
+    lo: 298.0,
+    hi: 3200.0,
+    a: [
+        49.95403, 4.887916, -0.352056, 0.046187, -0.825097, -652.9718, 92.56096, -635.0894,
+    ],
+}];
 
 /// Built-in species table, ordered as listed in scripts/gen_thermo.py.
-pub static SPECIES: [Species; 52] = [
+pub static SPECIES: [Species; 54] = [
     Species {
         id: "H2(g)",
         formula: "H2",
@@ -624,6 +544,17 @@ pub static SPECIES: [Species; 52] = [
         source: "NIST-JANAF 4th ed. (Chase 1998) via NIST WebBook",
     },
     Species {
+        id: "NaCl(l)",
+        formula: "NaCl",
+        phase: Phase::Liquid,
+        charge: 0,
+        hf298: -393.01,
+        s298: 79.91,
+        cp: Cp::Const(70.4),
+        dgf298: Some(-368.272),
+        source: "derived: NIST solid + dH_fus(1074)=28.0 kJ, Cp=70.4",
+    },
+    Species {
         id: "NaOH(s)",
         formula: "NaOH",
         phase: Phase::Solid,
@@ -644,6 +575,17 @@ pub static SPECIES: [Species; 52] = [
         cp: Cp::Shomate(&SHOMATE_FE_S_),
         dgf298: Some(0.0),
         source: "NIST-JANAF 4th ed. (Chase 1998) via NIST WebBook",
+    },
+    Species {
+        id: "Fe(l)",
+        formula: "Fe",
+        phase: Phase::Liquid,
+        charge: 0,
+        hf298: -6.18,
+        s298: 8.71,
+        cp: Cp::Const(46.0),
+        dgf298: Some(-0.645),
+        source: "derived: NIST solid + dH_fus(1811)=13.8 kJ, Cp=46.0",
     },
     Species {
         id: "Cu(s)",

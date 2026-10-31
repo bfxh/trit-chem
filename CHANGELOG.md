@@ -1,5 +1,30 @@
 # Changelog
 
+## 0.4.0 (2026-10-31) — salt and metal melting; Shomate phase filter
+
+### Fixed
+
+- **Shomate fits are filtered by phase.** A NIST page for a solid also lists its
+  liquid and gas fits; the generator kept them all, so above the melting point
+  the "solid" species used liquid Cp and the phase change silently vanished.
+  `gen_thermo.py` now keeps only the fits matching the species phase, and
+  `tests/fusion.rs` pins the solid Cp just below melting.
+
+### Added
+
+- `NaCl(l)` and `Fe(l)`, derived from the measured heats of fusion
+  (28.0 kJ/mol at 1074 K; 13.8 kJ/mol at 1811 K). Published 298 K liquid values
+  are extrapolations that disagree with those enthalpies, so they are replaced
+  by values anchored at the melting point.
+- `rules::fusion_transitions` and `trit-chem-cli melt`.
+
+### Verified
+
+- NaCl: dG_fus > 0 at 1073 K, < 0 at 1075 K, dH_fus = 28.0 kJ/mol.
+- Fe: dG_fus > 0 at 1810 K, < 0 at 1812 K, dH_fus = 13.8 kJ/mol.
+- Cascade keeps the stable phase 50 K on either side of both melting points.
+- Mutation: changing the NaCl liquid Cp from 70.4 to 100.0 fails two tests.
+
 ## 0.3.0 (2026-10-31) — water phase transitions
 
 ### Added

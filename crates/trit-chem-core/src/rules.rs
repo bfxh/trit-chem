@@ -176,6 +176,23 @@ fn gcd(a: i32, b: i32) -> i32 {
     if b == 0 { a.abs() } else { gcd(b, a % b) }
 }
 
+/// Fusion/solidification for `(solid, liquid)` species pairs.
+///
+/// Returns one reaction per direction; the cascade runs whichever has negative
+/// dG. Both rows are derived from the measured heat of fusion, so the melting
+/// point is the measured one rather than a 298 K extrapolation artefact.
+pub fn fusion_transitions(db: &Db, pairs: &[(usize, usize)]) -> Vec<Reaction> {
+    let mut out = Vec::new();
+    for (solid, liquid) in pairs {
+        for (from, to) in [(*solid, *liquid), (*liquid, *solid)] {
+            if let Ok(r) = build(db, vec![(from, -1.0), (to, 1.0)]) {
+                out.push(r);
+            }
+        }
+    }
+    out
+}
+
 /// The six water phase transitions, each as its own forward reaction.
 ///
 /// The cascade only moves downhill, so freezing and melting (and evaporation

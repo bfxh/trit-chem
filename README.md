@@ -13,6 +13,7 @@ Status: **M0, local only, not published.** 28 tests pass (`cargo test --workspac
 $ cargo run -p trit-chem-cli -- demo
 cargo run -p trit-chem-cli -- kiln      # CaCO3 -> CaO + CO2 over temperature
 cargo run -p trit-chem-cli -- phase     # ice / liquid / vapour equilibrium vs T
+cargo run -p trit-chem-cli -- melt      # NaCl and Fe melting, phase at each T
 
 == ranked by standard dG at 298.15 K (kJ per extent unit) ==
  -523.820  2Na(s) + 2H+(aq) -> 2Na+(aq) + H2(g)
@@ -39,7 +40,7 @@ Delivered in M0:
 | Reactions | element + charge balance checking, dG/dH/dS, K, reaction quotient |
 | Kinetics | Arrhenius rate constants, mass action, fixed-step RK4 |
 | Equilibrium | forward-only downhill cascade limited by the first exhausted reagent |
-| Rules | acid + metal, metal + water, neutralization, combustion, precipitation, displacement, water phase transitions |
+| Rules | acid + metal, metal + water, neutralization, combustion, precipitation, displacement, water/salt/metal phase transitions |
 | Redox | 38 half-reactions with E0, Nernst equation, cell potential |
 | CLI | `demo`, `check`, `elements`, `thermo` |
 
@@ -50,6 +51,7 @@ cargo test --workspace
 cargo run -p trit-chem-cli -- demo
 cargo run -p trit-chem-cli -- kiln      # CaCO3 -> CaO + CO2 over temperature
 cargo run -p trit-chem-cli -- phase     # ice / liquid / vapour equilibrium vs T
+cargo run -p trit-chem-cli -- melt      # NaCl and Fe melting, phase at each T
 cargo run -p trit-chem-cli -- thermo "H2O(l)" "NaCl(s)"
 cargo run -p trit-chem-cli -- check     # data self-consistency
 ```
@@ -61,10 +63,10 @@ cargo run -p trit-chem-cli -- check     # data self-consistency
   Above 0.5 M, Pitzer or SIT is needed and is not implemented.
 - **Constant Cp for ions.** Aqueous ions assume Cp = 0, so their temperature
   dependence is flat. Fine near 25 C, wrong near boiling.
-- **Phase transitions are water-only.** Ice Ih, liquid and vapour are modelled
-  as separate species with both directions in the network, so melting,
-  boiling and sublimation work. There is no nucleation barrier (no supercooled
-  water), no volume change, and no other substance has transitions yet.
+- **Phase transitions are partial.** Water (ice Ih / liquid / vapour) and the
+  fusion of NaCl and Fe are modelled as separate species with both directions
+  in the network. There is no nucleation barrier (no supercooled water), no
+  volume change, no polymorphs, and no boiling for salts or metals yet.
 - **The cascade is not a Gibbs minimiser.** It only moves downhill, one reaction
   at a time, and is path dependent. A White-Johnson-Dantzig element-potential
   solve is the M2 target; see `docs/PAPERS.md`.

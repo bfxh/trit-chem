@@ -15,6 +15,7 @@ fn main() {
         "demo" => demo(),
         "kiln" => kiln(),
         "phase" => phase(),
+        "melt" => melt(),
         "check" => check(),
         "elements" => {
             for a in &args[1..] {
@@ -58,7 +59,7 @@ fn main() {
         }
         other => {
             eprintln!(
-                "unknown command {other:?}; use demo | kiln | phase | check | elements | thermo"
+                "unknown command {other:?}; use demo | kiln | phase | melt | check | elements | thermo"
             );
             std::process::exit(2);
         }
@@ -247,5 +248,29 @@ fn phase() {
             "{:8.2}  {:10.6}  {:10.6}  {:10.6}  {:9.4}",
             t, st.n[ice], st.n[liq], st.n[gas], p
         );
+    }
+}
+
+fn melt() {
+    let db = Db::standard();
+    let cases = [
+        ("NaCl", 1074.0, 1000.0, 1100.0),
+        ("Fe", 1811.15, 1750.0, 1850.0),
+    ];
+    for (name, tm, below, above) in cases {
+        let solid = db.require(&format!("{name}(s)"));
+        let liquid = db.require(&format!("{name}(l)"));
+        let net = rules::fusion_transitions(&db, &[(solid, liquid)]);
+        println!("{name}: melting point {tm} K");
+        for t in [below, tm, above] {
+            let mut st = State::new(&db, t, 1.0, 0.0);
+            st.add(solid, 1.0);
+            let rep = equilibrium::relax(&db, &mut st, &net, 16, 1e-14);
+            assert!(rep.converged, "{name} {t}: {rep:?}");
+            println!(
+                "  {:7.1} K  solid {:.4}  liquid {:.4}",
+                t, st.n[solid], st.n[liquid]
+            );
+        }
     }
 }

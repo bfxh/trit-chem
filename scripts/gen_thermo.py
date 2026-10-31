@@ -38,8 +38,10 @@ SPECIES = [
     ("H2SO4(l)", "H2SO4", "liquid", 0, -813.99, -690.00, 156.90, SRC_NBS),
     ("Na(s)", "Na", "solid", 0, 0.0, 0.0, 51.21, SRC_JANAF),
     ("NaCl(s)", "NaCl", "solid", 0, -411.15, -384.12, 72.13, SRC_JANAF),
+    ("NaCl(l)", "NaCl", "liquid", 0, -393.01, -368.272, 79.91, "derived: NIST solid + dH_fus(1074)=28.0 kJ, Cp=70.4"),
     ("NaOH(s)", "NaOH", "solid", 0, -425.61, -379.49, 64.46, SRC_JANAF),
     ("Fe(s)", "Fe", "solid", 0, 0.0, 0.0, 27.28, SRC_JANAF),
+    ("Fe(l)", "Fe", "liquid", 0, -6.18, -0.645, 8.71, "derived: NIST solid + dH_fus(1811)=13.8 kJ, Cp=46.0"),
     ("Cu(s)", "Cu", "solid", 0, 0.0, 0.0, 33.15, SRC_JANAF),
     ("Zn(s)", "Zn", "solid", 0, 0.0, 0.0, 41.63, SRC_JANAF),
     ("Al2O3(s)", "Al2O3", "solid", 0, -1675.7, -1582.3, 50.92, SRC_JANAF),
@@ -79,6 +81,8 @@ SPECIES = [
 
 # Fallback constant Cp (J/mol/K) where NIST has no Shomate block for M0.
 CP_CONST = {
+    "NaCl(l)": 70.4,
+    "Fe(l)": 46.0,
     "H2O(s)": 38.0,
     "C(s,graphite)": 8.527,
     "CaCO3(s,calcite)": 81.88,
@@ -120,7 +124,10 @@ def main():
     statics = []
     rows = []
     for sid, formula, phase, charge, hf, gf, s, src in SPECIES:
-        blocks = dedupe(shom.get(sid, []))
+        # Keep only fits for this species' own phase: the NIST page for a
+        # solid also carries its liquid/gas fits, and using the liquid fit for
+        # the solid above the melting point silently erases the phase change.
+        blocks = [b for b in dedupe(shom.get(sid, [])) if b["label"] == phase]
         if blocks:
             name = "SHOMATE_" + rust_ident(sid)
             statics.append(

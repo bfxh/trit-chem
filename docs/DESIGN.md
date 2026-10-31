@@ -165,11 +165,26 @@ Validation (`tests/phase.rs`):
 `trit-chem-cli phase` prints the equilibrium composition of 1 mol of water in a
 10 L headspace from 250 to 450 K.
 
-Limits: ice Ih only (no other polymorphs); no volume change on melting or
-freezing (the liquid volume is held fixed); no supercooling or nucleation
-barrier, so the cascade jumps straight to the stable phase. The saturation
-pressure comes from ideal-gas and ideal-solution thermodynamics, which is why
-it is 1-3% low near the boiling point.
+Melting is also modelled for NaCl (1074 K, dH_fus 28.0 kJ/mol) and Fe
+(1811 K, dH_fus 13.8 kJ/mol). Their liquid rows are *derived* the same way: the
+measured heat of fusion fixes H and S at the melting point, and a constant
+liquid Cp backs those out to 298.15 K. The published 298 K values for these
+liquids are extrapolations that disagree with the measured fusion enthalpy by
+5-10 kJ, so they are not used.
+
+**Bug fixed on the way:** a NIST page for a solid also carries its liquid and
+gas fits, and the generator used to keep all of them. Above the melting point
+the "solid" species therefore used the liquid heat capacity, which silently
+erased the phase change. `gen_thermo.py` now keeps only fits whose phase label
+matches the species; `tests/fusion.rs` pins the solid Cp near the melting
+point so the filter cannot be removed silently.
+
+Limits: ice Ih only (no other polymorphs); fusion for two substances only; no
+volume change on melting or freezing (the liquid volume is held fixed); no
+supercooling or nucleation barrier, so the cascade jumps straight to the
+stable phase. The saturation pressure comes from ideal-gas and
+ideal-solution thermodynamics, which is why it is 1-3% low near the boiling
+point.
 
 ## 5. Audit of the AE-ENGINE v7.1 F0 numbers
 
