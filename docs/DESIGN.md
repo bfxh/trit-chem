@@ -45,9 +45,19 @@ G(T) = Gf(298) + [H(T) - H(298)] - T*[S(T) - S(298)] - (T - 298)*S(298)
 Why the anchor matters: for aqueous ions the tabulated `dHf`, `dGf` and `S` are
 **not** related by `dG = dH - T*dS`. The electron convention assigns the
 solvated electron zero Gibbs energy, so `dHf - T*S` shifts Na+ by about
-**19 kJ/mol**. Computing `G = dHf - T*S` (the obvious implementation) silently
-breaks every electrolyte reaction. The crate has a regression test for this
-(`Species::g` doc comment, `tests/acceptance.rs`).
+**19 kJ/mol**.
+
+That offset is proportional to charge and **cancels in any charge-balanced
+reaction**: `dHf - T*S` and the anchored formula give the same reaction dG (they
+differ by 0.03 kJ/mol on the sodium test, which is data rounding). So this is not
+a reaction-level trap; it is a per-species trap. `dHf - T*S` produces a G for
+Na+ that is not the Na+ formation Gibbs energy, which breaks partial queries,
+single-species lookups and any future unbalanced or constrained calculation.
+
+**Retraction:** an earlier draft of this section claimed the wrong formula
+"silently breaks every electrolyte reaction" and quoted a 19 kJ/mol reaction
+error. A mutation test disproved that: the reaction energy is unchanged. The
+anchor is still the correct implementation, but for the reason above.
 
 For neutral species the two definitions agree to rounding; the test suite checks
 that agreement for all 33 non-ionic species (worst deviation 0.65 kJ/mol,
