@@ -90,14 +90,33 @@ present. Gas partial pressure uses the ideal gas law with the headspace volume.
 
 ## 3. Activity model
 
-`a = p/p0` for gases, `a = c/(1 M)` for solutes, `a = 1` for present pure
-condensed phases. No activity coefficients.
+`a = p/p0` for gases, `a = 1` for present pure condensed phases, and for solutes
+`a = (c / 1 M) * gamma`.
 
-Consequence: ionic-strength effects are missing. At 0.1 M the mean ionic
-activity coefficient of a 1:1 salt is roughly 0.75, worth ~0.7 kJ/mol in `RT ln
-a` per ion; at 1 M it can be several kJ/mol and changes qualitative behaviour
-(undersaturated vs supersaturated). The demo stays at 0.05–0.1 M and should be
-read with that in mind.
+`gamma` is 1 under `ActivityModel::Ideal`. Under `ActivityModel::Davies` (the
+default) ions follow
+
+```
+log10(gamma) = -A z^2 ( sqrt(I)/(1+sqrt(I)) - 0.3 I ),   A = 0.509
+I = 0.5 * sum c_i z_i^2
+```
+
+Checked against measured NaCl mean ionic activity coefficients at 25 C:
+0.001 M -> 0.965 (measured 0.965), 0.01 M -> 0.902 (0.902), 0.1 M -> 0.782
+(0.778). Accuracy degrades above 0.1 M; at 0.5 M Davies gives ~0.73 against a
+measured 0.681, so treat 0.1-0.5 M as indicative and refuse to trust > 0.5 M.
+Neutral solutes get no salting-out term. `A` is held at its 25 C value, which
+costs about 20% in log10(gamma) at 100 C.
+
+Two consequences worth knowing:
+
+* The correction cancels exactly when the ionic charges on both sides match
+  (2 H+ vs 2 Na+), so acid-metal reactions are unchanged; it does *not* cancel
+  for the metal-water reaction (2 ions of each sign produced), which becomes
+  about `4 RT ln(gamma)` more favourable.
+* Because `gamma` depends on `I`, the reaction quotient is no longer guaranteed
+  monotone in extent. The extent solver scans 32 points for the first sign
+  change and bisects inside it instead of assuming monotonicity.
 
 ## 4. Audit of the AE-ENGINE v7.1 F0 numbers
 
@@ -150,7 +169,7 @@ and the draft should say so.
 
 M1 (correctness within the current model):
 
-1. Activity coefficients: Debye-Huckel / Davies first, Pitzer for brines.
+1. ~~Activity coefficients: Debye-Huckel / Davies first~~ (done in 0.2.0); next: Pitzer/SIT for brines.
 2. Ion Cp data, or a documented "298 K only" mode that refuses to extrapolate.
 3. Phase-change species and transition reactions (ice/water/steam, molten salts).
 4. Data expansion: the ~200 species a survival/crafting game actually touches

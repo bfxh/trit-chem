@@ -62,7 +62,17 @@ fn main() {
 
 fn demo() {
     let db = Db::standard();
-    let mut st = State::new(&db, T0, 1.0, 1.0);
+    let ideal = std::env::args().nth(2).as_deref() == Some("ideal");
+    let mut st = if ideal {
+        State::ideal(&db, T0, 1.0, 1.0)
+    } else {
+        State::new(&db, T0, 1.0, 1.0)
+    };
+    println!(
+        "activity model: {:?}
+",
+        st.activity_model
+    );
     let na = db.require("Na(s)");
     let hp = db.require("H+(aq)");
     let cl = db.require("Cl-(aq)");
@@ -124,6 +134,12 @@ fn demo() {
     };
     let ph2 = st.n[db.require("H2(g)")] * 8.314_462_618_153_24 * st.t / (st.gas_l * 1e-3) / 1e5;
     println!("\npH = {ph}   p(H2) = {ph2:.4} bar");
+    println!(
+        "ionic strength = {:.4} mol/L   gamma(Na+) = {:.4}   gamma(Cl-) = {:.4}",
+        st.ionic_strength(&db),
+        st.activity_coefficient(&db, db.require("Na+(aq)")),
+        st.activity_coefficient(&db, db.require("Cl-(aq)")),
+    );
     println!(
         "mass {:.6} -> {:.6} g (delta {:.2e}); charge {:.3e} -> {:.3e}",
         before_mass,

@@ -31,7 +31,7 @@ pub use element::{Element, Phase};
 pub use formula::{Formula, FormulaError};
 pub use reaction::{Reaction, ReactionError, Term};
 pub use species::{Db, SPECIES, Species};
-pub use state::State;
+pub use state::{ActivityModel, State};
 pub use thermo::{Cp, R, ShomateBlock, T0};
 
 /// Crate version, mirrored into CLI diagnostics.

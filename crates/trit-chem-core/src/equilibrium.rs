@@ -97,19 +97,36 @@ fn solve_extent(db: &Db, st: &State, rxn: &Reaction, xi_max: f64) -> f64 {
         rxn.apply(&mut probe, xi);
         rxn.dg(db, &probe)
     };
+    if f(0.0) >= 0.0 {
+        return 0.0;
+    }
     if f(xi_max) <= 0.0 {
         return xi_max;
     }
-    let (mut lo, mut hi) = (0.0_f64, xi_max);
-    for _ in 0..80 {
-        let mid = 0.5 * (lo + hi);
-        if f(mid) > 0.0 {
-            hi = mid;
-        } else {
-            lo = mid;
+    // Q is not guaranteed monotone once activity coefficients depend on ionic
+    // strength, so find the first sign change on a coarse grid and bisect only
+    // inside it. 32 probes per call; a tick with three reactions costs ~100
+    // state clones, which is fine at 60 Hz but is the first thing to optimise
+    // if the network grows.
+    const GRID: usize = 32;
+    let mut lo = 0.0_f64;
+    for k in 1..=GRID {
+        let hi = xi_max * (k as f64) / (GRID as f64);
+        if f(hi) >= 0.0 {
+            let (mut a, mut b) = (lo, hi);
+            for _ in 0..64 {
+                let mid = 0.5 * (a + b);
+                if f(mid) > 0.0 {
+                    b = mid;
+                } else {
+                    a = mid;
+                }
+            }
+            return 0.5 * (a + b);
         }
+        lo = hi;
     }
-    0.5 * (lo + hi)
+    xi_max
 }
 
 #[cfg(test)]

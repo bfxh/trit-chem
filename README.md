@@ -33,6 +33,7 @@ Delivered in M0:
 | Elements | all 118, with Pauling electronegativity, first ionization energy, radius, outer-shell electrons, oxidation states, phase/melt/boil/density |
 | Thermodynamics | standard-state H, S, Cp, G; NIST Shomate fits where available, constant Cp otherwise |
 | Species | 50 species (inorganic gases, metals, oxides, aqueous ions) with dHf/dGf/S at 25 C |
+| Activities | Davies ionic-strength correction (switchable to ideal); ionic strength reported by the CLI |
 | Reactions | element + charge balance checking, dG/dH/dS, K, reaction quotient |
 | Kinetics | Arrhenius rate constants, mass action, fixed-step RK4 |
 | Equilibrium | forward-only downhill cascade limited by the first exhausted reagent |
@@ -51,9 +52,9 @@ cargo run -p trit-chem-cli -- check     # data self-consistency
 
 ## Honest limits
 
-- **Ideal solution.** Activities are concentrations / partial pressures. Above
-  roughly 0.1 M ionic strength, Pitzer or Debye-Huckel corrections are needed;
-  the engine does not have them yet.
+- **Activity coefficients.** Ions use the Davies equation (a few percent at
+  I <= 0.1 M, approximate to ~0.5 M); neutral solutes and gases are ideal.
+  Above 0.5 M, Pitzer or SIT is needed and is not implemented.
 - **Constant Cp for ions.** Aqueous ions assume Cp = 0, so their temperature
   dependence is flat. Fine near 25 C, wrong near boiling.
 - **No phase transitions.** A species is one phase. Melting/boiling needs a

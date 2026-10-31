@@ -76,7 +76,8 @@ treatment that stays accurate into concentrated brines. Needed before seawater,
 acid baths or molten-salt gameplay.
 
 **C. W. Davies, Ion Association.** Butterworths (1962). *Citation only.* The
-Davies equation: a cheap bridge between Debye-Hückel and Pitzer.
+Davies equation, implemented in `state::activity_coefficient` and checked
+against measured NaCl activity coefficients at 0.001/0.01/0.1 M.
 
 **A. Fredenslund, R. L. Jones, J. M. Prausnitz, Group-contribution estimation of
 activity coefficients in nonideal liquid mixtures.** AIChE J. 21, 1086 (1975).

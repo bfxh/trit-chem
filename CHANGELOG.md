@@ -1,5 +1,31 @@
 # Changelog
 
+## 0.2.0 (2026-10-31) — ionic-strength activity coefficients
+
+### Added
+
+- `ActivityModel::{Ideal, Davies}`; `State` defaults to Davies.
+- `State::ionic_strength()` and `State::activity_coefficient()`; the CLI prints
+  both the ionic strength and the coefficients.
+- `tests/activity.rs`: Davies reproduces measured NaCl mean activity
+  coefficients (0.965 / 0.902 / 0.778 at 0.001 / 0.01 / 0.1 M); the correction
+  cancels exactly in the acid reaction and shifts the water reaction by
+  `4 RT ln(gamma)`; both models reach the same final state in the F0 scenario.
+
+### Changed
+
+- `solve_extent` no longer assumes Q is monotone: it scans 32 points for the
+  first sign change and bisects inside that bracket (activity coefficients make
+  Q non-monotone for high-charge ions).
+
+### Known limits
+
+- Davies is good to I <= 0.1 M, indicative to 0.5 M, unusable above; Pitzer/SIT
+  is the next step.
+- A is fixed at the 25 C value (0.509); at 100 C this costs ~20% in
+  log10(gamma).
+- Neutral solutes have no salting-out term.
+
 ## 0.1.1 (2026-10-31) — element source and licence
 
 ### Changed
