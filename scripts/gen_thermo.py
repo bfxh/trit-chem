@@ -11,6 +11,7 @@ the M0 model is documented as near-298 K only).  Every row keeps `dgf` so a
 test can recompute dG = dH - T*dS and compare.
 """
 import json
+import math
 import pathlib
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
@@ -38,10 +39,12 @@ SPECIES = [
     ("H2SO4(l)", "H2SO4", "liquid", 0, -813.99, -690.00, 156.90, SRC_NBS),
     ("Na(s)", "Na", "solid", 0, 0.0, 0.0, 51.21, SRC_JANAF),
     ("NaCl(s)", "NaCl", "solid", 0, -411.15, -384.12, 72.13, SRC_JANAF),
-    ("NaCl(l)", "NaCl", "liquid", 0, -393.01, -368.272, 79.91, "derived: NIST solid + dH_fus(1074)=28.0 kJ, Cp=70.4"),
+    ("NaCl(l)", "NaCl", "liquid", 0, -386.133, -364.814, 91.243, "derived: solid row + dH_fus(1074 K)=28.0 kJ, anchored with the generated bridge below the NIST liquid fit 1074-2500 K"),
+    ("NaCl(g)", "NaCl", "gas", 0, -181.42, -201.41, 229.79, "NIST-JANAF via NIST WebBook; gas fit 2500-6000 K, whose polynomial reproduces Cp(298.15) to 4% so no bridge is used"),
     ("NaOH(s)", "NaOH", "solid", 0, -425.61, -379.49, 64.46, SRC_JANAF),
     ("Fe(s)", "Fe", "solid", 0, 0.0, 0.0, 27.28, SRC_JANAF),
-    ("Fe(l)", "Fe", "liquid", 0, -6.18, -0.645, 8.71, "derived: NIST solid + dH_fus(1811)=13.8 kJ, Cp=46.0"),
+    ("Fe(l)", "Fe", "liquid", 0, 3.270, 8.818, 8.672, "derived: solid row + dH_fus(1811.15 K)=13.8 kJ; Cp from the NIST liquid fit 1809-3133 K"),
+    ("Fe(g)", "Fe", "gas", 0, 415.47, 369.79, 180.49, "NIST-JANAF via NIST WebBook; gas fit 3133-6000 K with a generated constant-Cp bridge to 298.15 K"),
     ("Cu(s)", "Cu", "solid", 0, 0.0, 0.0, 33.15, SRC_JANAF),
     ("Zn(s)", "Zn", "solid", 0, 0.0, 0.0, 41.63, SRC_JANAF),
     ("Al2O3(s)", "Al2O3", "solid", 0, -1675.7, -1582.3, 50.92, SRC_JANAF),
@@ -101,6 +104,58 @@ def rust_ident(s):
     return "".join(out).upper()
 
 
+T0 = 298.15
+# Bridge a fit whose backward extrapolation misses its own boundary value by
+# more than this. NIST fits some phases only from their melting or boiling point
+# up (NaCl liquid: 1074-2500 K), and the Shomate polynomial is not usable below
+# its range -- measured: Cp(NaCl liquid, 298.15) = 428 J/(mol K) against 70.4 at
+# the lower edge, and Cp(Fe gas, 298.15) = 79 against 26.6. H2O(g) and NaCl(g),
+# whose fits start at 500 K and 2500 K, extrapolate to within a few percent of
+# their boundary value, so they keep the published polynomial.
+BRIDGE_TOLERANCE = 0.25
+
+
+def cp_at(b, t):
+    x = t / 1000.0
+    return b["a"] + b["b"] * x + b["c"] * x * x + b["d"] * x ** 3 + b["e"] / (x * x)
+
+
+def h_rel(b, t):
+    x = t / 1000.0
+    return (b["a"] * x + b["b"] * x * x / 2 + b["c"] * x ** 3 / 3 + b["d"] * x ** 4 / 4
+            - b["e"] / x + b["f"] - b["h"])
+
+
+def needs_bridge(b):
+    edge = cp_at(b, b["lo"])
+    return edge > 0.0 and abs(cp_at(b, T0) / edge - 1.0) > BRIDGE_TOLERANCE
+
+
+def bridge(first, s298):
+    """Constant-Cp segment from 298.15 K to the first fitted range.
+
+    `cp_eff` is fixed by requiring H(seam) to equal the NIST fit's own
+    H(T) - H(298.15) at the seam, so H, Cp and (through the Cp/T integral) S are
+    all continuous there. The consequence is that the bridge is an *effective*
+    heat capacity for a stretch of temperature the phase may not even occupy
+    (a liquid below its melting point), not a measured one; the liquid row's
+    entropy anchor is derived with the same model, so the fusion readings stay
+    what the measured latent heat says.
+    """
+    lo = first["lo"]
+    cp_eff = h_rel(first, lo) * 1000.0 / (lo - T0)
+    t0 = T0 / 1000.0
+    return {"label": first["label"], "lo": T0, "hi": lo,
+            "a": cp_eff, "b": 0.0, "c": 0.0, "d": 0.0, "e": 0.0,
+            "f": -cp_eff * t0, "g": s298 - cp_eff * math.log(t0), "h": 0.0}
+
+
+def with_bridge(blocks, s298):
+    if blocks and needs_bridge(blocks[0]):
+        return [bridge(blocks[0], s298)] + blocks
+    return blocks
+
+
 def dedupe(blocks):
     seen = set()
     keep = []
@@ -127,7 +182,8 @@ def main():
         # Keep only fits for this species' own phase: the NIST page for a
         # solid also carries its liquid/gas fits, and using the liquid fit for
         # the solid above the melting point silently erases the phase change.
-        blocks = [b for b in dedupe(shom.get(sid, [])) if b["label"] == phase]
+        blocks = with_bridge(
+            [b for b in dedupe(shom.get(sid, [])) if b["label"] == phase], s)
         if blocks:
             name = "SHOMATE_" + rust_ident(sid)
             statics.append(

@@ -28,6 +28,11 @@ TARGETS = [
     ("H2SO4(l)", "C7664939", 2), ("S(s,rhombic)", "C7704349", 2),
     ("Fe2O3(s)", "C1309371", 2), ("Fe3O4(s)", "C1317619", 2),
     ("CaO(s)", "C1305788", 2), ("Ca(OH)2(s)", "C1305620", 2),
+    ("NaCl(g)", "C7647145", 1), ("Fe(g)", "C7439896", 1),
+    # Liquid fits live on the condensed-phase page of the same species; boiling
+    # needs Cp of the liquid all the way up to the boiling point, which a
+    # constant taken at the melting point does not give.
+    ("NaCl(l)", "C7647145", 2), ("Fe(l)", "C7439896", 2),
 ]
 
 SECTION = re.compile(r"(Gas|Liquid|Solid) Phase Heat Capacity \(Shomate Equation\)")
@@ -41,8 +46,27 @@ def fetch(cid, mask):
 
 def plain(html):
     txt = re.sub(r"<[^>]+>", " ", html)
-    txt = txt.replace("&nbsp;", " ")
+    txt = txt.replace("&nbsp;", " ").replace("&times;", "\u00d7")
     return re.sub(r"[ \t]+", " ", txt)
+
+
+NUM = re.compile(r"(-?\d+(?:\.\d+)?)(?:\u00d710\s*(-?\d+))?")
+
+
+def numbers(seg):
+    """Parse values, honouring NIST's `1.23x10-8` scientific notation.
+
+    Dropping the exponent is not a rounding error: Fe's liquid B coefficient is
+    -1.884667e-8, and truncating it to -1.88 changes Cp by eight orders of
+    magnitude.
+    """
+    out = []
+    for m in NUM.finditer(seg):
+        v = float(m.group(1))
+        if m.group(2):
+            v *= 10.0 ** int(m.group(2))
+        out.append(v)
+    return out
 
 
 def blocks(html):
@@ -75,8 +99,12 @@ def blocks(html):
                 nxt = body[start.end():]
                 stop = re.search(r"(?<![A-Za-z])" + letters[j + 1] + r"(?![A-Za-z])", nxt) if j + 1 < 8 else None
                 seg = nxt[:stop.start()] if stop else nxt
-                nums = [float(x) for x in re.findall(r"-?\d+\.?\d*", seg)]
-                if len(nums) < len(ranges):
+                nums = numbers(seg)
+                # One value per fitted range, or the row is mis-parsed: the
+                # exponent cells used to leave two stray integers behind, which
+                # shifted every later column. Any other count drops the block
+                # instead of silently assigning numbers to the wrong range.
+                if len(nums) != len(ranges):
                     cols = {}
                     break
                 cols[k.lower()] = nums[:len(ranges)]

@@ -240,6 +240,38 @@ static SHOMATE_NACL_S_: [ShomateBlock; 1] = [ShomateBlock {
     ],
 }];
 
+static SHOMATE_NACL_L_: [ShomateBlock; 2] = [
+    ShomateBlock {
+        lo: 298.15,
+        hi: 1074.0,
+        a: [
+            61.53725442830118,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            -18.347332407797996,
+            165.7128354153346,
+            0.0,
+        ],
+    },
+    ShomateBlock {
+        lo: 1074.0,
+        hi: 2500.0,
+        a: [
+            -42.4478, 113.526, -43.6466, 5.89663, 39.1386, -305.561, 91.0639, -385.923,
+        ],
+    },
+];
+
+static SHOMATE_NACL_G_: [ShomateBlock; 1] = [ShomateBlock {
+    lo: 2500.0,
+    hi: 6000.0,
+    a: [
+        37.29885, 0.792454, -0.027018, 0.002313, -0.157114, -193.1004, 273.8077, -181.4182,
+    ],
+}];
+
 static SHOMATE_NAOH_S_: [ShomateBlock; 2] = [
     ShomateBlock {
         lo: 298.0,
@@ -289,6 +321,45 @@ static SHOMATE_FE_S_: [ShomateBlock; 5] = [
         hi: 1809.0,
         a: [
             -776.7387, 919.4005, -383.7184, 57.08148, 242.1369, 697.6234, -558.3674, 0.0,
+        ],
+    },
+];
+
+static SHOMATE_FE_L_: [ShomateBlock; 1] = [ShomateBlock {
+    lo: 1809.0,
+    hi: 3133.345,
+    a: [
+        46.024,
+        -1.884667e-08,
+        6.094750000000001e-09,
+        -6.640301000000001e-10,
+        -8.246121e-09,
+        -10.80543,
+        72.54094,
+        12.39502,
+    ],
+}];
+
+static SHOMATE_FE_G_: [ShomateBlock; 2] = [
+    ShomateBlock {
+        lo: 298.15,
+        hi: 3133.345,
+        a: [
+            23.811103817079758,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            -7.099280603062329,
+            209.30521118855557,
+            0.0,
+        ],
+    },
+    ShomateBlock {
+        lo: 3133.345,
+        hi: 6000.0,
+        a: [
+            11.29253, 6.989707, -1.110305, 0.122354, 5.689278, 423.538, 206.3591, 415.4716,
         ],
     },
 ];
@@ -366,7 +437,7 @@ static SHOMATE_CAO_S_: [ShomateBlock; 1] = [ShomateBlock {
 }];
 
 /// Built-in species table, ordered as listed in scripts/gen_thermo.py.
-pub static SPECIES: [Species; 54] = [
+pub static SPECIES: [Species; 56] = [
     Species {
         id: "H2(g)",
         formula: "H2",
@@ -548,11 +619,22 @@ pub static SPECIES: [Species; 54] = [
         formula: "NaCl",
         phase: Phase::Liquid,
         charge: 0,
-        hf298: -393.01,
-        s298: 79.91,
-        cp: Cp::Const(70.4),
-        dgf298: Some(-368.272),
-        source: "derived: NIST solid + dH_fus(1074)=28.0 kJ, Cp=70.4",
+        hf298: -386.133,
+        s298: 91.243,
+        cp: Cp::Shomate(&SHOMATE_NACL_L_),
+        dgf298: Some(-364.814),
+        source: "derived: solid row + dH_fus(1074 K)=28.0 kJ, anchored with the generated bridge below the NIST liquid fit 1074-2500 K",
+    },
+    Species {
+        id: "NaCl(g)",
+        formula: "NaCl",
+        phase: Phase::Gas,
+        charge: 0,
+        hf298: -181.42,
+        s298: 229.79,
+        cp: Cp::Shomate(&SHOMATE_NACL_G_),
+        dgf298: Some(-201.41),
+        source: "NIST-JANAF via NIST WebBook; gas fit 2500-6000 K, whose polynomial reproduces Cp(298.15) to 4% so no bridge is used",
     },
     Species {
         id: "NaOH(s)",
@@ -581,11 +663,22 @@ pub static SPECIES: [Species; 54] = [
         formula: "Fe",
         phase: Phase::Liquid,
         charge: 0,
-        hf298: -6.18,
-        s298: 8.71,
-        cp: Cp::Const(46.0),
-        dgf298: Some(-0.645),
-        source: "derived: NIST solid + dH_fus(1811)=13.8 kJ, Cp=46.0",
+        hf298: 3.27,
+        s298: 8.672,
+        cp: Cp::Shomate(&SHOMATE_FE_L_),
+        dgf298: Some(8.818),
+        source: "derived: solid row + dH_fus(1811.15 K)=13.8 kJ; Cp from the NIST liquid fit 1809-3133 K",
+    },
+    Species {
+        id: "Fe(g)",
+        formula: "Fe",
+        phase: Phase::Gas,
+        charge: 0,
+        hf298: 415.47,
+        s298: 180.49,
+        cp: Cp::Shomate(&SHOMATE_FE_G_),
+        dgf298: Some(369.79),
+        source: "NIST-JANAF via NIST WebBook; gas fit 3133-6000 K with a generated constant-Cp bridge to 298.15 K",
     },
     Species {
         id: "Cu(s)",

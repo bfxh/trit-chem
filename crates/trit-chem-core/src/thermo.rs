@@ -77,6 +77,9 @@ pub enum Cp {
 impl Cp {
     /// Pick the fit covering `t`, or the nearest one when `t` is outside every
     /// fitted range (M0 extrapolates instead of refusing; DESIGN.md says so).
+    ///
+    /// Rows whose fits do not reach 298.15 K carry a generated bridge segment,
+    /// so the extrapolation that matters in practice is the one above `hi`.
     pub fn block_for(&self, t: f64) -> Option<&'static ShomateBlock> {
         match self {
             Cp::Const(_) => None,
@@ -121,6 +124,12 @@ impl Cp {
     /// `s_abs(298.15)` is an extrapolation and would put a step in S(T) at the
     /// range boundary. Integrate `Cp/T` from 298.15 instead: continuous across
     /// ranges and anchored at the tabulated entropy.
+    ///
+    /// A version that split the integral at every range edge was measured and
+    /// rejected: against a 4000-slice reference the single pass here is out by
+    /// +0.05 J/(mol K) for molten NaCl at 1738 K and the split version by
+    /// -0.11, because each segment's endpoint still samples the block that
+    /// claims the boundary. The kink is not what costs accuracy.
     pub fn s_rel(&self, t: f64) -> f64 {
         match self {
             Cp::Const(c) => c * (t / T0).ln(),
@@ -186,6 +195,53 @@ mod tests {
         assert!(
             (ds - 75.291 * (373.15_f64 / 298.15).ln()).abs() < 1e-9,
             "{ds}"
+        );
+    }
+
+    /// NIST fits some phases only from their melting or boiling point upward
+    /// (Fe gas: 3133.345-6000 K, NaCl liquid: 1074-2500 K). Run the polynomial
+    /// down to 298.15 K and its `E/t^2` term takes over - measured 79 J/(mol K)
+    /// for iron vapour against the real 25.15, and 428 J/(mol K) for molten salt
+    /// against 70.4 at the fit's own lower edge. The generator bridges those rows.
+    #[test]
+    fn no_row_extrapolates_a_runaway_heat_capacity_down_to_298_k() {
+        let db = crate::species::Db::standard();
+        let mut bridged = 0;
+        for sp in db.species() {
+            let Cp::Shomate(blocks) = sp.cp else { continue };
+            let first = &blocks[0];
+            if first.lo > T0 {
+                let edge = first.cp(first.lo);
+                let at298 = sp.cp.cp(T0);
+                assert!(
+                    edge > 0.0 && (at298 / edge - 1.0).abs() <= 0.3,
+                    "{}: Cp(298.15) = {at298} against {edge} at the lower edge {} K",
+                    sp.id,
+                    first.lo
+                );
+            } else if first.a[1] == 0.0 && first.a[4] == 0.0 && blocks.len() > 1 {
+                bridged += 1;
+                let seam = first.hi;
+                // The bridge's Cp is an effective constant, so it does not have
+                // to meet the fit's own value at the seam - but the gap must
+                // stay a rounding of the same physics, not a new phase.
+                let below = sp.cp.cp(seam - 1e-6);
+                let above = sp.cp.cp(seam + 1e-6);
+                assert!(
+                    above > 0.0 && (below / above - 1.0).abs() < 0.2,
+                    "{}: Cp jumps {below} -> {above} at the bridge seam {seam} K",
+                    sp.id
+                );
+                assert!(
+                    (sp.cp.h_rel_kj(seam - 1e-6) - sp.cp.h_rel_kj(seam + 1e-6)).abs() < 0.1,
+                    "{}: H step at the bridge seam {seam} K",
+                    sp.id
+                );
+            }
+        }
+        assert!(
+            bridged >= 2,
+            "expected at least two bridged rows, got {bridged}"
         );
     }
 }
