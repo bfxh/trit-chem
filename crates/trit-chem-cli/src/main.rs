@@ -331,16 +331,17 @@ fn boil() {
             (crossing(&vap) - tb) / tb * 100.0
         );
         println!(
-            "{:>8}  {:>9}  {:>9}  {:>12}  {:>12}",
-            "T/K", "dG_vap", "dG_sub", "p_liq/bar", "p_sol/bar"
+            "{:>8}  {:>9}  {:>9}  {:>9}  {:>12}  {:>12}",
+            "T/K", "dG_vap", "dH_vap", "dG_sub", "p_liq/bar", "p_sol/bar"
         );
         for t in grid {
             let (dg_v, dg_s) = (vap.dg_standard(&db, t), sub.dg_standard(&db, t));
             let p = |dg: f64| (-dg * 1000.0 / (R * t)).exp();
             println!(
-                "{:8.0}  {:9.2}  {:9.2}  {:12.3e}  {:12.3e}",
+                "{:8.1}  {:9.2}  {:9.2}  {:9.2}  {:12.3e}  {:12.3e}",
                 t,
                 dg_v,
+                vap.dh_standard(&db, t),
                 dg_s,
                 p(dg_v),
                 p(dg_s)

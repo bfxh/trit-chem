@@ -6,6 +6,7 @@
 //! against measured values.
 
 use trit_chem_core::equilibrium;
+use trit_chem_core::formula::Formula;
 use trit_chem_core::reaction::{Reaction, Term};
 use trit_chem_core::rules;
 use trit_chem_core::species::Db;
@@ -176,4 +177,263 @@ fn cascade_follows_the_vapour_pressure_it_predicts() {
     );
     assert!(cool.n[liq] > 0.9, "cool: {cool:?}");
     assert!(cool.n[solid] < 1e-9, "1200 K is above the melting point");
+}
+
+/// Moles of element `z` held by a state, counted from the species formulas.
+fn atoms(db: &Db, st: &State, z: u8) -> f64 {
+    let mut sum = 0.0;
+    for (i, n) in st.n.iter().enumerate() {
+        let f = Formula::parse(db.get(i).formula).expect("formula");
+        sum += f.count(z) * n;
+    }
+    sum
+}
+
+fn both(db: &Db, condensed: &str, gas: &str) -> (Reaction, Reaction) {
+    (
+        transition(db, condensed, gas),
+        transition(db, gas, condensed),
+    )
+}
+
+#[test]
+fn vapour_pressure_increases_monotonically_up_to_the_validated_window() {
+    // Clausius-Clapeyron: dS of a condensed-to-gas pair is positive, so p_sat
+    // must rise at every step. Swept to 2800 K on purpose: above the last
+    // fitted range the polynomial runs free and NaCl(s) (whose only fit ends at
+    // 1073 K) starts *falling* - measured 77.1 bar at 2972 K down to 39.2 bar at
+    // 3566 K, which means dS went negative. That defect is recorded in
+    // docs/DATA.md; pretending the sweep passes would hide it.
+    let db = Db::standard();
+    for name in ["NaCl", "Fe"] {
+        for from in ["(l)", "(s)"] {
+            let r = transition(&db, &format!("{name}{from}"), &format!("{name}(g)"));
+            let mut prev = f64::NEG_INFINITY;
+            let mut t = 400.0;
+            while t <= 2800.0 {
+                let p = p_sat(&db, &r, t);
+                assert!(
+                    p > prev,
+                    "{name}{from}: p_sat fell at {t} K ({p} after {prev})"
+                );
+                assert!(p.is_finite() && p > 0.0, "{name}{from} at {t} K: {p}");
+                prev = p;
+                t *= 1.2;
+            }
+        }
+    }
+}
+
+#[test]
+fn the_bisection_and_the_pressure_agree_at_the_boiling_point() {
+    // exp(-dG/RT) must be exactly 1 bar where dG crosses zero. Units slip
+    // (kJ against J) or a wrong standard pressure land here, not in the
+    // calibrated tolerance of the Tb test.
+    let db = Db::standard();
+    for (name, want) in [("NaCl", 1738.0), ("Fe", 3134.0)] {
+        let vap = transition(&db, &format!("{name}(l)"), &format!("{name}(g)"));
+        let tb = boiling_point(&db, &vap);
+        let p = p_sat(&db, &vap, tb);
+        assert!((p - 1.0).abs() < 0.005, "{name}: p_sat(Tb) = {p} bar");
+        assert!((tb - want).abs() / want < 0.05, "{name}: Tb {tb} vs {want}");
+    }
+}
+
+#[test]
+fn clapeyron_slope_matches_the_latent_heat() {
+    // d ln p / d(1/T) = -dH_vap / R. This ties the derivative of the numeric
+    // pressure curve to the enthalpy path, which the value-only checks cannot:
+    // H and G can both be wrong in a way that still crosses zero near Tb.
+    let db = Db::standard();
+    for name in ["NaCl", "Fe"] {
+        let vap = transition(&db, &format!("{name}(l)"), &format!("{name}(g)"));
+        for t in [1400.0, 1800.0, 2600.0] {
+            let (t1, t2) = (t - 20.0, t + 20.0);
+            let slope =
+                (p_sat(&db, &vap, t2).ln() - p_sat(&db, &vap, t1).ln()) / (1.0 / t2 - 1.0 / t1);
+            let want = -vap.dh_standard(&db, t) * 1000.0 / R;
+            let rel = (slope - want).abs() / want.abs();
+            assert!(rel < 0.001, "{name} at {t} K: {slope} vs {want}");
+        }
+    }
+}
+
+#[test]
+fn sublimation_identity_holds_across_a_dense_sweep() {
+    let db = Db::standard();
+    for name in ["NaCl", "Fe"] {
+        let (s, l, g) = (
+            format!("{name}(s)"),
+            format!("{name}(l)"),
+            format!("{name}(g)"),
+        );
+        let (fus, vap, sub) = (
+            transition(&db, &s, &l),
+            transition(&db, &l, &g),
+            transition(&db, &s, &g),
+        );
+        for k in 0..24 {
+            let t = 600.0 + k as f64 * 200.0;
+            let want = fus.dg_standard(&db, t) + vap.dg_standard(&db, t);
+            assert!(
+                (want - sub.dg_standard(&db, t)).abs() < 1e-9,
+                "{name} at {t} K: {want} vs {}",
+                sub.dg_standard(&db, t)
+            );
+        }
+    }
+}
+
+#[test]
+fn only_the_downhill_direction_is_available() {
+    // Both directions are in the network because the cascade refuses to climb.
+    // If a pair ever has both dG <= 0, or neither, the network is wrong.
+    let db = Db::standard();
+    for (name, tb) in [("NaCl", 1738.0), ("Fe", 3000.0)] {
+        let (gas, gas2) = (format!("{name}(l)"), format!("{name}(g)"));
+        let (down, up) = both(&db, &gas, &gas2);
+        for t in [1000.0, tb - 200.0, tb + 200.0, 4000.0] {
+            let (a, b) = (down.dg_standard(&db, t), up.dg_standard(&db, t));
+            assert!(
+                (a < 0.0 && b > 0.0) || (a > 0.0 && b < 0.0),
+                "{name} at {t} K: {a} / {b} must straddle zero"
+            );
+            assert!(
+                (a + b).abs() < 1e-9,
+                "{name} at {t} K: reverses are {a} and {b}"
+            );
+        }
+    }
+}
+
+#[test]
+fn the_same_cascade_twice_gives_bitwise_identical_amounts() {
+    let db = Db::standard();
+    let (liq, gas, solid) = (
+        db.require("NaCl(l)"),
+        db.require("NaCl(g)"),
+        db.require("NaCl(s)"),
+    );
+    let net = rules::phase_transitions(&db, &[(liq, gas), (solid, gas), (solid, liq)]);
+    let run = || {
+        let mut st = State::new(&db, 1500.0, 0.05, 1000.0);
+        st.add(liq, 1.0);
+        let rep = equilibrium::relax(&db, &mut st, &net, 128, 1e-14);
+        assert!(rep.converged, "{rep:?}");
+        st
+    };
+    let (a, b) = (run(), run());
+    for i in 0..a.n.len() {
+        assert_eq!(
+            a.n[i].to_bits(),
+            b.n[i].to_bits(),
+            "species {i} differs between identical runs"
+        );
+    }
+}
+
+#[test]
+fn the_liquid_amount_does_not_move_the_vapour_pressure() {
+    // A pure condensed phase has unit activity while present, so a bigger
+    // melt pool cannot change the equilibrium pressure - only run out.
+    let db = Db::standard();
+    let (liq, gas, solid) = (
+        db.require("NaCl(l)"),
+        db.require("NaCl(g)"),
+        db.require("NaCl(s)"),
+    );
+    let net = rules::phase_transitions(&db, &[(liq, gas), (solid, gas), (solid, liq)]);
+    let mut small = State::new(&db, 1300.0, 0.05, 1000.0);
+    small.add(liq, 0.5);
+    let mut big = State::new(&db, 1300.0, 5.0, 1000.0);
+    big.add(liq, 5.0);
+    assert!(
+        equilibrium::relax(&db, &mut small, &net, 128, 1e-14).converged,
+        "small pool did not converge"
+    );
+    assert!(
+        equilibrium::relax(&db, &mut big, &net, 128, 1e-14).converged,
+        "big pool did not converge"
+    );
+    assert!(
+        (small.n[gas] - big.n[gas]).abs() < 1e-12,
+        "vapour amount depends on the pool: {} vs {}",
+        small.n[gas],
+        big.n[gas]
+    );
+    assert!(small.n[liq] > 0.0 && big.n[liq] > 0.0);
+}
+
+#[test]
+fn nothing_moves_without_matter() {
+    let db = Db::standard();
+    let (liq, gas, solid) = (
+        db.require("NaCl(l)"),
+        db.require("NaCl(g)"),
+        db.require("NaCl(s)"),
+    );
+    let net = rules::phase_transitions(&db, &[(liq, gas), (solid, gas), (solid, liq)]);
+    let mut st = State::new(&db, 2000.0, 0.05, 1000.0);
+    let rep = equilibrium::relax(&db, &mut st, &net, 128, 1e-14);
+    assert!(rep.converged, "empty state: {rep:?}");
+    for (i, n) in st.n.iter().enumerate() {
+        assert_eq!(*n, 0.0, "species {i} appeared from nothing");
+    }
+}
+
+#[test]
+fn two_substances_share_a_network_without_borrowing_atoms() {
+    // 1 mol NaCl plus 1 mol Fe at 1900 K: above both melting points, and above
+    // the salt's boiling point but far below the metal's, so the salt must all
+    // be vapour, the iron must all be liquid, and neither may gain atoms from
+    // the other.
+    let db = Db::standard();
+    let (nacl_l, nacl_g, fe_s, fe_l, fe_g) = (
+        db.require("NaCl(l)"),
+        db.require("NaCl(g)"),
+        db.require("Fe(s)"),
+        db.require("Fe(l)"),
+        db.require("Fe(g)"),
+    );
+    let na = db.require("Na(s)");
+    let pairs = [
+        (nacl_l, nacl_g),
+        (db.require("NaCl(s)"), nacl_g),
+        (db.require("NaCl(s)"), nacl_l),
+        (fe_s, fe_l),
+        (fe_s, fe_g),
+        (fe_l, fe_g),
+    ];
+    let net = rules::phase_transitions(&db, &pairs);
+    let mut st = State::new(&db, 1900.0, 0.05, 1000.0);
+    st.add(nacl_l, 1.0);
+    st.add(fe_s, 1.0);
+    let mass_before = st.mass_g(&db);
+    let rep = equilibrium::relax(&db, &mut st, &net, 128, 1e-14);
+    assert!(rep.converged, "{rep:?}");
+    assert!(
+        st.n[nacl_g] > 0.99,
+        "salt did not evaporate: {}",
+        st.n[nacl_g]
+    );
+    assert!(st.n[fe_l] > 0.99, "iron did not melt: {}", st.n[fe_l]);
+    assert!(st.n[fe_s] < 1e-6, "solid iron survived: {}", st.n[fe_s]);
+    assert!(
+        st.n[fe_g] < 0.05,
+        "iron evaporated too much: {}",
+        st.n[fe_g]
+    );
+    assert!(
+        st.n[na] < 1e-12,
+        "NaCl split into its elements: {}",
+        st.n[na]
+    );
+    assert!((atoms(&db, &st, 11) - 1.0).abs() < 1e-12, "sodium count");
+    assert!((atoms(&db, &st, 17) - 1.0).abs() < 1e-12, "chlorine count");
+    assert!((atoms(&db, &st, 26) - 1.0).abs() < 1e-12, "iron count");
+    assert!(
+        (st.mass_g(&db) - mass_before).abs() < 1e-9,
+        "mass: {mass_before} -> {}",
+        st.mass_g(&db)
+    );
 }

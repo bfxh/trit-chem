@@ -75,6 +75,14 @@ These run in `cargo test`:
 7. **Cp range sanity**: a Shomate row whose first fit starts above 298.15 K must
    reproduce its own boundary heat capacity within 30% there, or be bridged;
    bridged rows may step at most 20% in Cp and 0.1 kJ/mol in H at the seam.
+8. **Clausius-Clapeyron consistency**: `d ln p_sat / d(1/T)` must equal
+   `-dH_vap/R` within 0.1% at 1400/1800/2600 K for both substances; this is what
+   caught the moving-node Simpson integral.
+9. **Boiling invariants**: `p_sat` strictly increasing up to 2800 K, 1 bar at the
+   bisected boiling point, `dG_sub = dG_fus + dG_vap` over a 24-point sweep,
+   both directions of a pair straddling zero, identical cascade results run twice
+   (bitwise), vapour amount independent of pool size, empty state stays empty,
+   and a shared NaCl+Fe network conserving each element to 1e-12.
 
 Run `cargo run -p trit-chem-cli -- check` to print the worst recomputation error
 without running the test suite.
@@ -83,11 +91,17 @@ without running the test suite.
 
 * **Water vapour below 500 K.** NIST's fit starts at 500 K. The engine
   extrapolates; steam at 25 C is not used in the demo for this reason.
+* **Above the highest fitted range.** Same extrapolation going up, and there it
+  breaks monotonicity: `NaCl(s)` (single fit ending at 1073 K) gives a *falling*
+  vapour pressure above about 3000 K - 77.1 bar at 2972 K down to 39.2 bar at
+  3566 K, which is `dS < 0`. No phase transition is used up there, so nothing
+  shipped depends on it, but do not ask the model for a 4000 K salt vapour until
+  the plateau above `hi` is generated too.
 * **Iron's solid entropy path.** NIST publishes five overlapping solid ranges
   whose seam values disagree, so integrating `Cp/T` from 298.15 K lands
   8.0 J/(mol K) below the absolute entropy of the fit that covers 1811 K (engine
   84.2 against 92.2). The molten-iron row inherits the offset through its
-  fusion anchor, which is why iron boils 4.3% low (3001 K against 3134 K). The
+  fusion anchor, which is why iron boils 4.2% low (3003 K against 3134 K). The
   vapour row is accurate to 0.2 J/(mol K), and the NaCl solid and liquid rows
   agree with their own fits to within 0.15 J/(mol K) at the melting point.
 * **Bridge heat capacities are effective, not measured.** Each bridge constant is

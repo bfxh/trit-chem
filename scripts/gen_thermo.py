@@ -43,7 +43,7 @@ SPECIES = [
     ("NaCl(g)", "NaCl", "gas", 0, -181.42, -201.41, 229.79, "NIST-JANAF via NIST WebBook; gas fit 2500-6000 K, whose polynomial reproduces Cp(298.15) to 4% so no bridge is used"),
     ("NaOH(s)", "NaOH", "solid", 0, -425.61, -379.49, 64.46, SRC_JANAF),
     ("Fe(s)", "Fe", "solid", 0, 0.0, 0.0, 27.28, SRC_JANAF),
-    ("Fe(l)", "Fe", "liquid", 0, 3.270, 8.818, 8.672, "derived: solid row + dH_fus(1811.15 K)=13.8 kJ; Cp from the NIST liquid fit 1809-3133 K"),
+    ("Fe(l)", "Fe", "liquid", 0, 3.270, 8.792, 8.761, "derived: solid row + dH_fus(1811.15 K)=13.8 kJ; Cp from the NIST liquid fit 1809-3133 K"),
     ("Fe(g)", "Fe", "gas", 0, 415.47, 369.79, 180.49, "NIST-JANAF via NIST WebBook; gas fit 3133-6000 K with a generated constant-Cp bridge to 298.15 K"),
     ("Cu(s)", "Cu", "solid", 0, 0.0, 0.0, 33.15, SRC_JANAF),
     ("Zn(s)", "Zn", "solid", 0, 0.0, 0.0, 41.63, SRC_JANAF),

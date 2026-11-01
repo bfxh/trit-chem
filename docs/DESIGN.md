@@ -95,14 +95,19 @@ looks plausible in spot checks; the self-consistency test catches it.
   taken straight from the block covering T. Subtracting the same block's value
   at 298.15 would extrapolate it outside its range and put a step at every
   range boundary (measured 3.1 kJ/mol for CO2 at 1200 K before the fix).
-* `S(T)-S(298.15)` is integrated numerically as `integral Cp/T` (48-point
-  Simpson). Using the blocks' absolute entropies directly also steps at range
-  boundaries, because only the first block is anchored at the tabulated
-  entropy. The integration reproduces NIST-JANAF S(1000 K) to within 0.1 J/K
-  for CO2 and H2O(g). Splitting the integral at every range edge was tried and
-  rejected: against a 4000-slice reference (molten NaCl, 1738 K) the single pass
-  is out by +0.05 J/(mol K) and the split by -0.11, because each segment's
-  endpoint still samples the block that claims the boundary.
+* `S(T)-S(298.15)` is integrated **analytically over each fitted range the path
+  crosses**: the antiderivative of `Cp/T` is the block's own entropy expression,
+  and taking differences per segment makes the `G` constants cancel, so S is
+  continuous with derivative exactly `Cp/T`. Using a higher block's absolute
+  entropy at 298.15 K instead would extrapolate it outside its range and step at
+  every boundary.
+  A 48-point Simpson pass over the whole interval was the first version and is
+  now rejected with numbers: its nodes move with the upper limit, so S wobbled
+  by about 1 J/(mol K) between neighbouring temperatures, which threw
+  `d ln p / d(1/T) = -dH/R` off by 2.9% at 1400 K and **8.3% at 1800 K** for
+  molten NaCl. The analytic version holds to 0.002% over the same grid
+  (`tests/vapor.rs::clapeyron_slope_matches_the_latent_heat`). The integration
+  still reproduces NIST-JANAF S(1000 K) to within 0.1 J/K for CO2 and H2O(g).
 * Aqueous ions use `Cp = 0`. Standard partial molar heat capacities of ions are
   small and frequently negative; pretending they are zero is better than
   inventing values, but it means ion thermodynamics is a 25 C tool.
@@ -198,10 +203,10 @@ Validation (`tests/vapor.rs`):
 
 | quantity | model | reference |
 | --- | ---: | ---: |
-| NaCl Tb (dG_vap = 0) | 1791 K (+3.1%) | 1738 K |
+| NaCl Tb (dG_vap = 0) | 1788 K (+2.9%) | 1738 K |
 | NaCl dH_vap(1738 K) | 166.5 kJ/mol | 171 |
 | NaCl dH_sub(298.15 K) | 229.7 kJ/mol | 229.7 |
-| Fe Tb (dG_vap = 0) | 3001 K (-4.3%) | 3134 K |
+| Fe Tb (dG_vap = 0) | 3003 K (-4.2%) | 3134 K |
 | Fe dH_vap(3134 K) | 358.7 kJ/mol | 349.9 |
 | Fe dH_sub(298.15 K) | 415.5 kJ/mol | 416.3 |
 | dG_sub - (dG_fus + dG_vap) | < 1e-9 kJ | identity |
@@ -235,9 +240,16 @@ the boiling milestone is the first thing that needed a liquid fit.
 
 Limits: ice Ih only (no other polymorphs); fusion, boiling and sublimation for
 two substances only; no volume change on melting, boiling or freezing (the
-liquid volume is held fixed); no nucleation or bubble barrier, so the cascade
-jumps straight to the stable phase; the gas is ideal, which is why the
-saturation pressure comes out 1-3% low near the boiling point.
+liquid volume is held fixed (verified: two pool sizes give the same vapour
+amount to 1e-12); no nucleation or bubble barrier, so the cascade jumps straight
+to the stable phase; the gas is ideal, which is why the saturation pressure
+comes out 1-3% low near the boiling point.
+* **Above the last fitted range the polynomial runs free.** `NaCl(s)` has one
+  fit ending at 1073 K, and past it the extrapolated entropy turns around:
+  `p_sat` falls from 77.1 bar at 2972 K to 39.2 bar at 3566 K, i.e. dS goes
+  negative. The monotonicity sweep is therefore run to 2800 K and the defect is
+  on the list in `docs/DATA.md`; the fix is the same plateau idea as the lower
+  bridge, applied above `hi`.
 
 ## 5. Audit of the AE-ENGINE v7.1 F0 numbers
 

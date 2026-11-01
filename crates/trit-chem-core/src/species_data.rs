@@ -664,9 +664,9 @@ pub static SPECIES: [Species; 56] = [
         phase: Phase::Liquid,
         charge: 0,
         hf298: 3.27,
-        s298: 8.672,
+        s298: 8.761,
         cp: Cp::Shomate(&SHOMATE_FE_L_),
-        dgf298: Some(8.818),
+        dgf298: Some(8.792),
         source: "derived: solid row + dH_fus(1811.15 K)=13.8 kJ; Cp from the NIST liquid fit 1809-3133 K",
     },
     Species {

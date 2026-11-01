@@ -44,17 +44,21 @@ def h_rel(blocks, t):
     return G.h_rel(pick(blocks, t), t)
 
 
-def s_rel(blocks, t):
-    """Mirror of Cp::s_rel: one composite Simpson pass, 48 intervals."""
-    a, b, n = T0, t, 48
-    h = (b - a) / n
+def s_abs(b, t):
+    x = t / 1000.0
+    return (b["a"] * math.log(x) + b["b"] * x + b["c"] * x * x / 2 + b["d"] * x ** 3 / 3
+            - b["e"] / (2 * x * x) + b["g"])
 
-    def f(x):
-        return cp_at(blocks, x) / x
-    total = f(a) + f(b)
-    for k in range(1, n):
-        total += (4 if k % 2 else 2) * f(a + h * k)
-    return total * h / 3.0
+
+def s_rel(blocks, t):
+    """Mirror of Cp::s_rel: analytic per fitted range, block constants cancel."""
+    a, b = (T0, t) if t >= T0 else (t, T0)
+    edges = sorted(set([a, b] + [x for bl in blocks for x in (bl["lo"], bl["hi"]) if a < x < b]))
+    total = 0.0
+    for p, q in zip(edges, edges[1:]):
+        bl = pick(blocks, 0.5 * (p + q))
+        total += s_abs(bl, q) - s_abs(bl, p)
+    return total if t >= T0 else -total
 
 
 # solid row: (id, dHf298, S298, element entropy sum for the formula)

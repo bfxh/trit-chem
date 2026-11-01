@@ -1,5 +1,52 @@
 # Changelog
 
+## 0.5.1 (2026-11-01) - boiling test batch; the entropy integral was the defect
+
+### Fixed
+
+- **`S(T)` is now integrated analytically over each fitted range it crosses.**
+  The 48-point Simpson pass used a fixed interval count between 298.15 K and T, so
+  its nodes moved with T and S wobbled by ~1 J/(mol K) between neighbouring
+  temperatures. Measured consequence: `d ln p_sat / d(1/T)` was 2.9% off
+  `-dH_vap/R` at 1400 K and **8.3% at 1800 K** for molten NaCl. The segment sum
+  agrees to 0.002% and the test pins it at 0.1%. Per-block `G` constants cancel
+  between segments, so no fit is evaluated outside its own range.
+- Supersedes the 0.5.0 bullet that recorded the segmented integral as rejected:
+  it was closer to the converged value than the single pass (+0.05 against
+  -0.11 J/(mol K) at 1738 K), but neither variant is node-stable, and neither is
+  what ships now.
+
+### Added
+
+- `tests/vapor.rs` went from 6 to 15 tests: monotone `p_sat` sweep to 2800 K,
+  exactly 1 bar at the bisected boiling point, Clausius-Clapeyron slope against
+  the latent heat, sublimation identity over a 24-point sweep, both directions of
+  a pair straddling zero, bitwise-identical cascade when the same path runs twice,
+  vapour amount independent of pool size, nothing moves without matter, and a
+  shared NaCl+Fe network conserving Na/Cl/Fe atoms to 1e-12.
+- `trit-chem-cli boil` prints `dH_vap` alongside `dG`.
+- Defect found by the monotonicity sweep and recorded instead of tuned away:
+  above the last fitted range the polynomial runs free, so `NaCl(s)` (its only fit
+  ends at 1073 K) gives a **falling** vapour pressure - 77.1 bar at 2972 K down to
+  39.2 bar at 3566 K, i.e. dS < 0. Nothing shipped uses that region; the fix is an
+  upper plateau mirroring the lower bridge.
+
+### Verified
+
+- Readings re-taken under the analytic integral: NaCl Tb 1788 K (+2.9% against
+  1738 K), Fe Tb 3003 K (-4.2% against 3134 K); latent heats unchanged,
+  dH_vap(1738) = 166.50 and dH_vap(3134) = 358.69 kJ/mol. `Fe(l)` anchors
+  re-derived with it (S298 8.761, dGf 8.792); `NaCl(l)` unchanged.
+- The two mutation falsifications from 0.5.0 were re-run after each change; the
+  Clapeyron test is the new one that discriminates the numerical scheme.
+
+### Changed
+
+- `bfxh/trit-chem` is **public** now (A126, user decided 2026-11-01). Checked
+  before flipping: no credentials (the only 48+ base64-shaped strings are SHA-256
+  digests and PyPI URLs), no local absolute paths in tracked files, licences
+  already MIT-compatible. Anonymous API returns 200.
+
 ## 0.5.0 (2026-11-01) — boiling and sublimation of the salt and the metal
 
 ### Fixed

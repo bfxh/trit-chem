@@ -69,7 +69,7 @@ cargo run -p trit-chem-cli -- check     # data self-consistency
   fusion, boiling and sublimation of NaCl and Fe are modelled as separate
   species with both directions in the network; the transition temperature is
   where the model's own condensed-to-gas dG crosses zero rather than a table
-  entry. Boiling: NaCl 1738 -> 1791 K (+3.1%), Fe 3134 -> 3001 K (-4.3%).
+  entry. Boiling: NaCl 1738 -> 1788 K (+2.9%), Fe 3134 -> 3003 K (-4.2%).
   Latent heats of vaporisation are within 2.6% (salt) and 2.5% (iron); the
   sublimation enthalpies at 25 C are within 0.2%. No nucleation barrier (no
   supercooled water), no volume change, no polymorphs, and the iron gap is an
