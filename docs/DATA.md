@@ -42,6 +42,7 @@ From the repository root:
 python scripts/fetch_elements.py   # network; pinned mendeleev wheel -> elements.json
 python scripts/gen_elements.py     # elements.json -> elements_data.rs
 python scripts/fetch_shomate.py    # network; writes data/external/shomate.json
+python scripts/derive_liquid_anchors.py  # prints the NaCl(l)/Fe(l) dHf/S/dGf anchors
 python scripts/gen_thermo.py       # writes species_data.rs
 cargo test --workspace             # data consistency gates run here
 ```

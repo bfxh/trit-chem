@@ -33,6 +33,9 @@
   pair, with `rules::water_pairs` for the three water pairs.
 - `trit-chem-cli boil`: model boiling point, dG of vaporisation and sublimation,
   and the vapour pressure they imply.
+- `scripts/derive_liquid_anchors.py` recomputes the `NaCl(l)` / `Fe(l)`
+  `dHf`/`S`/`dGf` anchors from the fetched fits plus the measured latent heat, so
+  the two hand-embedded rows stay recomputable instead of folklore.
 - `tests/vapor.rs` (6 tests) plus `thermo::tests::no_row_extrapolates_a_runaway_
   heat_capacity_down_to_298_k` as a data-shape gate.
 - Rejected experiment, recorded: splitting the entropy integral at every range
