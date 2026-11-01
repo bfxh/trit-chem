@@ -45,7 +45,7 @@ fn cascade_keeps_the_phase_that_is_stable() {
     for (name, tm) in [("NaCl", 1074.0), ("Fe", 1811.15)] {
         let solid = db.require(&format!("{name}(s)"));
         let liquid = db.require(&format!("{name}(l)"));
-        let net = rules::fusion_transitions(&db, &[(solid, liquid)]);
+        let net = rules::phase_transitions(&db, &[(solid, liquid)]);
         let run = |t: f64| {
             let mut st = State::new(&db, t, 1.0, 0.0);
             st.add(solid, 1.0);

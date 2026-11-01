@@ -176,15 +176,21 @@ fn gcd(a: i32, b: i32) -> i32 {
     if b == 0 { a.abs() } else { gcd(b, a % b) }
 }
 
-/// Fusion/solidification for `(solid, liquid)` species pairs.
+/// Both directions of each `(a, b)` phase pair.
 ///
-/// Returns one reaction per direction; the cascade runs whichever has negative
-/// dG. Both rows are derived from the measured heat of fusion, so the melting
-/// point is the measured one rather than a 298 K extrapolation artefact.
-pub fn fusion_transitions(db: &Db, pairs: &[(usize, usize)]) -> Vec<Reaction> {
+/// The cascade only moves downhill, so melting and freezing (vaporisation and
+/// condensation, sublimation and deposition) must both be present; whichever
+/// direction has negative dG is the one that runs.
+///
+/// Pairs are given by species index: `(solid, liquid)` for melting,
+/// `(liquid, gas)` for boiling and `(solid, gas)` for sublimation. The gas side
+/// sits at the 1 bar standard state, so the dG of a vaporisation pair crosses
+/// zero at that species' normal boiling point - which is how the transition
+/// temperatures are checked without a separate table of them.
+pub fn phase_transitions(db: &Db, pairs: &[(usize, usize)]) -> Vec<Reaction> {
     let mut out = Vec::new();
-    for (solid, liquid) in pairs {
-        for (from, to) in [(*solid, *liquid), (*liquid, *solid)] {
+    for (a, b) in pairs {
+        for (from, to) in [(*a, *b), (*b, *a)] {
             if let Ok(r) = build(db, vec![(from, -1.0), (to, 1.0)]) {
                 out.push(r);
             }
@@ -193,27 +199,13 @@ pub fn fusion_transitions(db: &Db, pairs: &[(usize, usize)]) -> Vec<Reaction> {
     out
 }
 
-/// The six water phase transitions, each as its own forward reaction.
-///
-/// The cascade only moves downhill, so freezing and melting (and evaporation
-/// and condensation, sublimation and deposition) must both be present; the
-/// direction with negative dG is the one that runs.
-pub fn water_transitions(db: &Db) -> Vec<Reaction> {
+/// The six water phase transitions as one `(solid, liquid)`, `(liquid, gas)` and
+/// `(solid, gas)` pair set.
+pub fn water_pairs(db: &Db) -> [(usize, usize); 3] {
     let ice = db.require("H2O(s)");
     let liq = db.require("H2O(l)");
     let gas = db.require("H2O(g)");
-    let pairs = [
-        (liq, ice),
-        (ice, liq),
-        (liq, gas),
-        (gas, liq),
-        (ice, gas),
-        (gas, ice),
-    ];
-    pairs
-        .into_iter()
-        .filter_map(|(from, to)| build(db, vec![(from, -1.0), (to, 1.0)]).ok())
-        .collect()
+    [(ice, liq), (liq, gas), (ice, gas)]
 }
 
 /// All rules that can be instantiated for `metal_z` with the built-in table.
@@ -240,6 +232,34 @@ pub fn candidates_for_metal(db: &Db, metal_z: u8) -> Vec<Reaction> {
 mod tests {
     use super::*;
     use crate::thermo::T0;
+
+    #[test]
+    fn phase_transitions_cover_both_directions() {
+        let db = Db::standard();
+        let (l, g) = (db.require("NaCl(l)"), db.require("NaCl(g)"));
+        let net = phase_transitions(&db, &[(l, g)]);
+        assert_eq!(net.len(), 2);
+        assert_eq!(net[0].label, "NaCl(l) -> NaCl(g)");
+        assert_eq!(net[1].label, "NaCl(g) -> NaCl(l)");
+        // The downhill direction flips at the boiling point, so both rows are
+        // needed: one of them has positive dG at every temperature.
+        let vap = transition_dg(&db, l, g, 1500.0);
+        let back = transition_dg(&db, g, l, 1500.0);
+        assert!(vap > 0.0 && back < 0.0, "{vap} / {back}");
+    }
+
+    fn transition_dg(db: &Db, from: usize, to: usize, t: f64) -> f64 {
+        let r = build(db, vec![(from, -1.0), (to, 1.0)]).unwrap();
+        r.dg_standard(db, t)
+    }
+
+    #[test]
+    fn water_pairs_are_the_three_transitions() {
+        let db = Db::standard();
+        let pairs = water_pairs(&db);
+        assert_eq!(pairs.len(), 3);
+        assert_eq!(phase_transitions(&db, &pairs).len(), 6);
+    }
 
     #[test]
     fn sodium_rules_are_balanced() {

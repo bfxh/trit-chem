@@ -9,7 +9,7 @@ use trit_chem_core::state::State;
 use trit_chem_core::thermo::R;
 
 fn relax_at(db: &Db, t: f64) -> State {
-    let net = rules::water_transitions(db);
+    let net = rules::phase_transitions(db, &rules::water_pairs(db));
     let mut st = State::new(db, t, 0.018, 10.0);
     st.add(db.require("H2O(l)"), 1.0);
     let rep = equilibrium::relax(db, &mut st, &net, 128, 1e-14);

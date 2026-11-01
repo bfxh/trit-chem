@@ -1,5 +1,70 @@
 # Changelog
 
+## 0.5.0 (2026-11-01) — boiling and sublimation of the salt and the metal
+
+### Fixed
+
+- **NIST scientific notation is parsed.** `fetch_shomate.py` carried an exponent
+  helper that no call site used, so cells rendered as `-1.884667×10-8` were read
+  as `-1.884667` plus two stray integers: the value truncated by up to eight
+  orders of magnitude *and* every later column shifted. `shomate.json` held
+  truncated liquid fits for Al2O3, CaO, Fe, SiO2 and Zn; nothing shipped was
+  wrong only because phase filtering discarded those blocks until boiling needed
+  a liquid fit. The parser now requires exactly one value per fitted range and
+  drops the block otherwise. Falsified: re-fetching with the old parser fails
+  `iron_melts_near_1811_k_with_the_measured_latent_heat` and
+  `cascade_keeps_the_phase_that_is_stable`.
+- **Heat capacity is no longer extrapolated as a polynomial below a fit's
+  range.** `Cp(Fe gas, 298.15 K)` came out 79 J/(mol K) against the real 25.15,
+  `Cp(NaCl liquid, 298.15 K)` 428 against 70.4 at the fit's own lower edge.
+  `gen_thermo.py` prepends a constant-Cp bridge (298.15 K to the first fit)
+  whenever a row's backward extrapolation misses that boundary value by more
+  than 25%; the bridge constant is what makes `H` meet the published fit exactly
+  at the seam. Falsified: with the bridge disabled the new data-shape gate goes
+  red.
+
+### Added
+
+- `NaCl(g)` and `Fe(g)` species rows. `NaCl(l)` and `Fe(l)` now take their Cp
+  shape from NIST's own liquid fits (1074-2500 K and 1809-3133 K) instead of a
+  constant taken at the melting point, with the fusion anchors re-derived.
+- `rules::phase_transitions` replaces `fusion_transitions` and
+  `water_transitions`: one helper emitting both directions of any `(a, b)` phase
+  pair, with `rules::water_pairs` for the three water pairs.
+- `trit-chem-cli boil`: model boiling point, dG of vaporisation and sublimation,
+  and the vapour pressure they imply.
+- `tests/vapor.rs` (6 tests) plus `thermo::tests::no_row_extrapolates_a_runaway_
+  heat_capacity_down_to_298_k` as a data-shape gate.
+- Rejected experiment, recorded: splitting the entropy integral at every range
+  edge. Against a 4000-slice reference (molten NaCl, 1738 K) the single 48-point
+  pass is out by +0.05 J/(mol K) and the split by -0.11, because each segment's
+  endpoint still samples the block claiming the boundary. The simpler code stays.
+
+### Verified
+
+| quantity | model | reference |
+| --- | ---: | ---: |
+| NaCl Tb (dG_vap = 0) | 1791 K (+3.1%) | 1738 K |
+| NaCl dH_vap(1738 K) | 166.5 kJ/mol | 171 |
+| NaCl dH_sub(298.15 K) | 229.7 kJ/mol | 229.7 |
+| Fe Tb (dG_vap = 0) | 3001 K (-4.3%) | 3134 K |
+| Fe dH_vap(3134 K) | 358.7 kJ/mol | 349.9 |
+| Fe dH_sub(298.15 K) | 415.5 kJ/mol | 416.3 |
+| dG_sub - (dG_fus + dG_vap) | < 1e-9 kJ | identity |
+| 1 mol NaCl(l) in 1000 L | all vapour at 1900 K; stops at p_sat within 2% at 1200 K | - |
+
+NaCl and Fe melting readings are unchanged (dG_fus still brackets 1074 K and
+1811.15 K, dH_fus 28.0 and 13.8 kJ/mol) and the water validation table in
+`docs/DESIGN.md` §4 still passes.
+
+### Known gap
+
+Iron's solid entropy path lands 8.0 J/(mol K) below the absolute entropy of the
+fit that covers it (engine 84.2 against 92.2 at 1811 K), because NIST publishes
+five overlapping solid ranges; the liquid row inherits the offset through its
+fusion anchor, which is most of the -4.3% on iron's boiling point. See
+`docs/DATA.md` and DESIGN §4.
+
 ## 0.4.0 (2026-10-31) — salt and metal melting; Shomate phase filter
 
 ### Fixed

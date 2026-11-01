@@ -16,6 +16,7 @@ fn main() {
         "kiln" => kiln(),
         "phase" => phase(),
         "melt" => melt(),
+        "boil" => boil(),
         "check" => check(),
         "elements" => {
             for a in &args[1..] {
@@ -230,7 +231,7 @@ fn phase() {
         db.require("H2O(l)"),
         db.require("H2O(g)"),
     );
-    let net = rules::water_transitions(&db);
+    let net = rules::phase_transitions(&db, &rules::water_pairs(&db));
     println!("1 mol water, 10 L headspace, six phase transitions");
     println!(
         "{:>8}  {:>10}  {:>10}  {:>10}  {:>9}",
@@ -260,7 +261,7 @@ fn melt() {
     for (name, tm, below, above) in cases {
         let solid = db.require(&format!("{name}(s)"));
         let liquid = db.require(&format!("{name}(l)"));
-        let net = rules::fusion_transitions(&db, &[(solid, liquid)]);
+        let net = rules::phase_transitions(&db, &[(solid, liquid)]);
         println!("{name}: melting point {tm} K");
         for t in [below, tm, above] {
             let mut st = State::new(&db, t, 1.0, 0.0);
@@ -270,6 +271,79 @@ fn melt() {
             println!(
                 "  {:7.1} K  solid {:.4}  liquid {:.4}",
                 t, st.n[solid], st.n[liquid]
+            );
+        }
+    }
+}
+
+/// Boiling and sublimation: the temperature where each condensed-to-gas dG
+/// reaches zero (that is the normal boiling point, because the gas side sits at
+/// 1 bar) and the vapour pressure the same dG predicts below it.
+fn boil() {
+    let db = Db::standard();
+    let cases = [
+        (
+            "NaCl",
+            1738.0,
+            [800.0, 1074.0, 1300.0, 1500.0, 1738.0, 2000.0, 2500.0],
+        ),
+        (
+            "Fe",
+            3134.0,
+            [1500.0, 1811.15, 2000.0, 2500.0, 3000.0, 3134.0, 3500.0],
+        ),
+    ];
+    for (name, tb, grid) in cases {
+        let (solid, liquid, gas) = (
+            db.require(&format!("{name}(s)")),
+            db.require(&format!("{name}(l)")),
+            db.require(&format!("{name}(g)")),
+        );
+        let vap = Reaction::new(
+            &db,
+            "vap",
+            vec![Term::new(liquid, -1.0), Term::new(gas, 1.0)],
+        )
+        .unwrap();
+        let sub = Reaction::new(
+            &db,
+            "sub",
+            vec![Term::new(solid, -1.0), Term::new(gas, 1.0)],
+        )
+        .unwrap();
+        // dG falls monotonically with T for a condensed-to-gas pair, so a
+        // bisection on the sign change is enough.
+        let crossing = |r: &Reaction| {
+            let (mut lo, mut hi) = (400.0, 6000.0);
+            for _ in 0..60 {
+                let mid = (lo + hi) / 2.0;
+                if r.dg_standard(&db, mid) > 0.0 {
+                    lo = mid;
+                } else {
+                    hi = mid;
+                }
+            }
+            (lo + hi) / 2.0
+        };
+        println!(
+            "{name}: measured Tb {tb} K, model Tb {:.1} K ({:+.1}%)",
+            crossing(&vap),
+            (crossing(&vap) - tb) / tb * 100.0
+        );
+        println!(
+            "{:>8}  {:>9}  {:>9}  {:>12}  {:>12}",
+            "T/K", "dG_vap", "dG_sub", "p_liq/bar", "p_sol/bar"
+        );
+        for t in grid {
+            let (dg_v, dg_s) = (vap.dg_standard(&db, t), sub.dg_standard(&db, t));
+            let p = |dg: f64| (-dg * 1000.0 / (R * t)).exp();
+            println!(
+                "{:8.0}  {:9.2}  {:9.2}  {:12.3e}  {:12.3e}",
+                t,
+                dg_v,
+                dg_s,
+                p(dg_v),
+                p(dg_s)
             );
         }
     }

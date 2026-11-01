@@ -14,6 +14,7 @@ $ cargo run -p trit-chem-cli -- demo
 cargo run -p trit-chem-cli -- kiln      # CaCO3 -> CaO + CO2 over temperature
 cargo run -p trit-chem-cli -- phase     # ice / liquid / vapour equilibrium vs T
 cargo run -p trit-chem-cli -- melt      # NaCl and Fe melting, phase at each T
+cargo run -p trit-chem-cli -- boil      # NaCl and Fe boiling / sublimation vs T
 
 == ranked by standard dG at 298.15 K (kJ per extent unit) ==
  -523.820  2Na(s) + 2H+(aq) -> 2Na+(aq) + H2(g)
@@ -35,14 +36,14 @@ Delivered in M0:
 | --- | --- |
 | Elements | all 118, with Pauling electronegativity, first ionization energy, radius, outer-shell electrons, oxidation states, phase/melt/boil/density |
 | Thermodynamics | standard-state H, S, Cp, G; NIST Shomate fits where available, constant Cp otherwise |
-| Species | 50 species (inorganic gases, metals, oxides, aqueous ions) with dHf/dGf/S at 25 C |
+| Species | 56 species (inorganic gases, metals, oxides, aqueous ions, molten and vapour salt/iron) with dHf/dGf/S at 25 C |
 | Activities | Davies ionic-strength correction (switchable to ideal); ionic strength reported by the CLI |
 | Reactions | element + charge balance checking, dG/dH/dS, K, reaction quotient |
 | Kinetics | Arrhenius rate constants, mass action, fixed-step RK4 |
 | Equilibrium | forward-only downhill cascade limited by the first exhausted reagent |
-| Rules | acid + metal, metal + water, neutralization, combustion, precipitation, displacement, water/salt/metal phase transitions |
+| Rules | acid + metal, metal + water, neutralization, combustion, precipitation, displacement, water/salt/metal phase transitions (melt, boil, sublime and the reverse) |
 | Redox | 38 half-reactions with E0, Nernst equation, cell potential |
-| CLI | `demo`, `check`, `elements`, `thermo` |
+| CLI | `demo`, `check`, `elements`, `thermo`, `kiln`, `phase`, `melt`, `boil` |
 
 ## Quick start
 
@@ -52,6 +53,7 @@ cargo run -p trit-chem-cli -- demo
 cargo run -p trit-chem-cli -- kiln      # CaCO3 -> CaO + CO2 over temperature
 cargo run -p trit-chem-cli -- phase     # ice / liquid / vapour equilibrium vs T
 cargo run -p trit-chem-cli -- melt      # NaCl and Fe melting, phase at each T
+cargo run -p trit-chem-cli -- boil      # NaCl and Fe boiling / sublimation vs T
 cargo run -p trit-chem-cli -- thermo "H2O(l)" "NaCl(s)"
 cargo run -p trit-chem-cli -- check     # data self-consistency
 ```
@@ -64,9 +66,14 @@ cargo run -p trit-chem-cli -- check     # data self-consistency
 - **Constant Cp for ions.** Aqueous ions assume Cp = 0, so their temperature
   dependence is flat. Fine near 25 C, wrong near boiling.
 - **Phase transitions are partial.** Water (ice Ih / liquid / vapour) and the
-  fusion of NaCl and Fe are modelled as separate species with both directions
-  in the network. There is no nucleation barrier (no supercooled water), no
-  volume change, no polymorphs, and no boiling for salts or metals yet.
+  fusion, boiling and sublimation of NaCl and Fe are modelled as separate
+  species with both directions in the network; the transition temperature is
+  where the model's own condensed-to-gas dG crosses zero rather than a table
+  entry. Boiling: NaCl 1738 -> 1791 K (+3.1%), Fe 3134 -> 3001 K (-4.3%).
+  Latent heats of vaporisation are within 2.6% (salt) and 2.5% (iron); the
+  sublimation enthalpies at 25 C are within 0.2%. No nucleation barrier (no
+  supercooled water), no volume change, no polymorphs, and the iron gap is an
+  entropy-path error explained in `docs/DESIGN.md` §4.
 - **The cascade is not a Gibbs minimiser.** It only moves downhill, one reaction
   at a time, and is path dependent. A White-Johnson-Dantzig element-potential
   solve is the M2 target; see `docs/PAPERS.md`.

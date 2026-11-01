@@ -79,6 +79,18 @@ looks plausible in spot checks; the self-consistency test catches it.
 * If a temperature falls outside every fitted range, the nearest block is used
   and the result is extrapolated. This is a documented approximation, not an
   error state. Water vapour, for example, has no NIST fit below 500 K.
+* **Except where the polynomial is not extrapolable.** NIST fits some phases
+  only from their melting or boiling point upward, and the Shomate `E/t^2` term
+  blows up below the range: measured `Cp(Fe gas, 298.15 K) = 79 J/(mol K)`
+  against the real 25.15, and `Cp(NaCl liquid, 298.15 K) = 428` against 70.4 at
+  the fit's own lower edge. `gen_thermo.py` therefore prepends a constant-Cp
+  bridge segment (298.15 K to the first fit) whenever a row's backward
+  extrapolation misses its boundary value by more than 25%. The bridge's Cp is
+  fixed so that `H` meets the NIST fit exactly at the seam, which keeps H, S and
+  the entropy integral continuous; it is an *effective* heat capacity for a
+  stretch of temperature the phase may not even occupy, not a measurement.
+  Rows within tolerance (H2O gas from 500 K, NaCl gas from 2500 K, Fe liquid,
+  whose fit is essentially constant) keep the published polynomial.
 * Each NIST block is already referenced to H(298.15), so `H(T)-H(298.15)` is
   taken straight from the block covering T. Subtracting the same block's value
   at 298.15 would extrapolate it outside its range and put a step at every
@@ -87,7 +99,10 @@ looks plausible in spot checks; the self-consistency test catches it.
   Simpson). Using the blocks' absolute entropies directly also steps at range
   boundaries, because only the first block is anchored at the tabulated
   entropy. The integration reproduces NIST-JANAF S(1000 K) to within 0.1 J/K
-  for CO2 and H2O(g).
+  for CO2 and H2O(g). Splitting the integral at every range edge was tried and
+  rejected: against a 4000-slice reference (molten NaCl, 1738 K) the single pass
+  is out by +0.05 J/(mol K) and the split by -0.11, because each segment's
+  endpoint still samples the block that claims the boundary.
 * Aqueous ions use `Cp = 0`. Standard partial molar heat capacities of ions are
   small and frequently negative; pretending they are zero is better than
   inventing values, but it means ion thermodynamics is a 25 C tool.
@@ -166,11 +181,41 @@ Validation (`tests/phase.rs`):
 10 L headspace from 250 to 450 K.
 
 Melting is also modelled for NaCl (1074 K, dH_fus 28.0 kJ/mol) and Fe
-(1811 K, dH_fus 13.8 kJ/mol). Their liquid rows are *derived* the same way: the
-measured heat of fusion fixes H and S at the melting point, and a constant
-liquid Cp backs those out to 298.15 K. The published 298 K values for these
-liquids are extrapolations that disagree with the measured fusion enthalpy by
-5-10 kJ, so they are not used.
+(1811 K, dH_fus 13.8 kJ/mol). Their liquid rows are *derived*: the measured
+heat of fusion fixes H and S at the melting point, while the Cp shape comes from
+NIST's own liquid fit (1074-2500 K and 1809-3133 K) bridged down to 298.15 K.
+The published 298 K values for these liquids are extrapolations that disagree
+with the measured fusion enthalpy by 5-10 kJ, so they are not used.
+
+Boiling and sublimation are the same mechanism with a gas partner
+(`NaCl(l)/NaCl(g)`, `NaCl(s)/NaCl(g)`, `Fe(l)/Fe(g)`, `Fe(s)/Fe(g)` through
+`rules::phase_transitions`). No boiling point is stored anywhere: the gas side
+of a condensed-to-gas reaction sits at the 1 bar standard state, so the
+temperature where its dG crosses zero *is* the normal boiling point, and
+`exp(-dG/RT)` is the vapour pressure in bar below it.
+
+Validation (`tests/vapor.rs`):
+
+| quantity | model | reference |
+| --- | ---: | ---: |
+| NaCl Tb (dG_vap = 0) | 1791 K (+3.1%) | 1738 K |
+| NaCl dH_vap(1738 K) | 166.5 kJ/mol | 171 |
+| NaCl dH_sub(298.15 K) | 229.7 kJ/mol | 229.7 |
+| Fe Tb (dG_vap = 0) | 3001 K (-4.3%) | 3134 K |
+| Fe dH_vap(3134 K) | 358.7 kJ/mol | 349.9 |
+| Fe dH_sub(298.15 K) | 415.5 kJ/mol | 416.3 |
+| dG_sub - (dG_fus + dG_vap) | < 1e-9 kJ | identity |
+| 1 mol NaCl(l), 1000 L headspace | all vapour at 1900 K; stops at p_sat within 2% at 1200 K | - |
+
+The 4% iron gap is traced rather than mysterious. The entropy path for solid
+iron lands 8.0 J/(mol K) below the absolute entropy of the fit that covers it
+(engine 84.2 against fit 92.2 at 1811 K) because NIST publishes five
+overlapping solid ranges whose seam values disagree, and the liquid row
+inherits the same offset through the fusion anchor. The vapour side is right to
+0.2 J/(mol K) (engine 236.5 against fit 236.7 at 3134 K). Cancelling the offset
+would move iron's boiling point to about 3220 K - the same size error the other
+way - so the fix is to choose one solid fit per row instead of letting the range
+list decide, which is the next data task.
 
 **Bug fixed on the way:** a NIST page for a solid also carries its liquid and
 gas fits, and the generator used to keep all of them. Above the melting point
@@ -179,12 +224,20 @@ erased the phase change. `gen_thermo.py` now keeps only fits whose phase label
 matches the species; `tests/fusion.rs` pins the solid Cp near the melting
 point so the filter cannot be removed silently.
 
-Limits: ice Ih only (no other polymorphs); fusion for two substances only; no
-volume change on melting or freezing (the liquid volume is held fixed); no
-supercooling or nucleation barrier, so the cascade jumps straight to the
-stable phase. The saturation pressure comes from ideal-gas and
-ideal-solution thermodynamics, which is why it is 1-3% low near the boiling
-point.
+**Second bug, same family:** `fetch_shomate.py` dropped NIST's scientific
+notation. Those cells arrive as `-1.884667×10-8` once the tags are stripped, and
+the parser read `-1.884667` plus two stray integers - truncating the value by
+eight orders of magnitude *and* shifting every column after it. The exponent
+handling existed in the script as a helper that no call site used, so
+`shomate.json` carried truncated liquid fits for Al2O3, CaO, Fe, SiO2 and Zn.
+Nothing shipped was wrong only because phase filtering discarded those blocks;
+the boiling milestone is the first thing that needed a liquid fit.
+
+Limits: ice Ih only (no other polymorphs); fusion, boiling and sublimation for
+two substances only; no volume change on melting, boiling or freezing (the
+liquid volume is held fixed); no nucleation or bubble barrier, so the cascade
+jumps straight to the stable phase; the gas is ideal, which is why the
+saturation pressure comes out 1-3% low near the boiling point.
 
 ## 5. Audit of the AE-ENGINE v7.1 F0 numbers
 
@@ -239,7 +292,10 @@ M1 (correctness within the current model):
 
 1. ~~Activity coefficients: Debye-Huckel / Davies first~~ (done in 0.2.0); next: Pitzer/SIT for brines.
 2. Ion Cp data, or a documented "298 K only" mode that refuses to extrapolate.
-3. Phase-change species and transition reactions (ice/water/steam, molten salts).
+3. ~~Phase-change species and transition reactions (ice/water/steam, molten
+   salts)~~ (done through 0.5.0: water plus NaCl and Fe melting, boiling and
+   sublimation). Next: choose one NIST solid fit per row so iron's entropy stops
+   losing 8 J/(mol K) at its seam, then cover more substances (Cu, Al, Si).
 4. Data expansion: the ~200 species a survival/crafting game actually touches
    (fuels, ores, alloys, acids, gases), with a per-species source field.
 5. ~~Replace the CC BY-SA element source~~ (done in M0.1: mendeleev 1.3.0, MIT).
